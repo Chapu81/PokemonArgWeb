@@ -1,31 +1,21 @@
 <template>
 <div>
-	<h1>This is an about page</h1>
-	<button @click="add_card">Push data</button>
-
-	<ul>
-		<template v-for="card in cards">
-			<li :key="card.id">
-				<!-- <img :src="card.img" :alt="card.name"> -->
-				<p>{{card.name}} <span @click="delete_card(card.id)">X</span></p>
-				<button @click="update_card(card.id)">Modificar</button>
-				<span>{{card.price}}</span>
-				<span>{{card.language}}</span>
-			</li>
-		</template>
-	</ul>
-
-	<button @click="logout">Logout</button>
-	<button @click="login">Login</button>
-
+	<template v-for="card in cards">
+		<card-c :card="card" :key="card.id" />	
+	</template>
 </div>
 </template>
 
 <script>
 import firebase from 'firebase'
 import db from '../main'
+import Card from '../components/Card'
 export default {
 	name: 'about',
+	
+	components: {
+		'card-c': Card,
+    },
 
 	data: () => ({
 		cards: [],
