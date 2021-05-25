@@ -29,6 +29,8 @@ export default {
 
 	data: () => ({
 		cards: [],
+		/* email: 'chapu.caballito@hotmail.com',
+		password: 'Metallica1981', */
 		email: 'pokemonarg.web@gmail.com',
 		password: 'Pokemonarg1981',
 	}),
