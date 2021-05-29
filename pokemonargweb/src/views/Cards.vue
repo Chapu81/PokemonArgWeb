@@ -11,7 +11,7 @@ import firebase from 'firebase'
 import db from '../main'
 import Card from '../components/Card'
 export default {
-	name: 'about',
+	name: 'cards',
 	
 	components: {
 		'card-c': Card,

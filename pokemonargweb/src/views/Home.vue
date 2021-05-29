@@ -1,16 +1,19 @@
 <template>
-  <!-- <hello-world /> -->
-  <div></div>
+	<div>
+		
+	</div>
 </template>
 
 <script>
-  // import HelloWorld from '../components/HelloWorld'
+	export default {
+		name: 'Home',
 
-  export default {
-    name: 'Home',
+		data: () => ({
 
-    components: {
-      // HelloWorld,
-    },
-  }
+		}),
+	}
 </script>
+
+<style scoped>
+
+</style>
