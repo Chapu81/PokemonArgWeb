@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
+import './css/styles.css';
 
 import firebase from 'firebase/app';
 import 'firebase/auth'
@@ -18,6 +19,18 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+
+store.commit('set_firebase', firebase);
+
+firebase.auth().onAuthStateChanged(function(user) {
+	if (user) {
+    store.commit('log_state', true);
+		// console.log('Logueado: onAuthStateChanged');
+	} else {
+    store.commit('log_state', false);
+		// console.log('Deslogueado: onAuthStateChanged');
+	}
+});
 
 export default firebase.firestore();
 

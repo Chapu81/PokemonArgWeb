@@ -1,28 +1,29 @@
 <template>
 <div>
 	<template v-for="card in cards">
-		<card-c :card="card" :key="card.id" />	
+		<card-c :card="card" :key="card.id" @card_delete="card_delete($event)" />	
 	</template>
+
+	<snackbar-c :text="snackbar_text" @close="snackbar_text = ''" />
 </div>
 </template>
 
 <script>
-import firebase from 'firebase'
 import db from '../main'
 import Card from '../components/Card'
+import Snackbar from '../components/Snackbar'
+
 export default {
 	name: 'cards',
 	
 	components: {
 		'card-c': Card,
+		'snackbar-c': Snackbar,
     },
 
 	data: () => ({
 		cards: [],
-		/* email: 'chapu.caballito@hotmail.com',
-		password: 'Metallica1981', */
-		email: 'pokemonarg.web@gmail.com',
-		password: 'Pokemonarg1981',
+		snackbar_text: '',
 	}),
 
 	created() {
@@ -75,38 +76,15 @@ export default {
 				console.log(error);
 			}
 		},
-		
-		async delete_card(id) {
-			try {
-				await db.collection('cards').doc(id).delete();
 
+		card_delete(state) {
+			if(state) {
 				this.get_cards();
-			}catch (error) {
-				console.log(error);
+				this.snackbar_text = 'La carta se eliminó correctamente';
+			}else {
+				this.snackbar_text = 'Ocurrió un error al eliminar la carta';
 			}
-		},
-
-		logout() {
-			firebase.auth().signOut().then(() => {
-				console.log('Logout ok!');
-			}).catch((error) => {
-				console.log(error);
-			});
-		},
-
-		login() {
-			firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-				.then((userCredential) => {
-					// var user = userCredential.user;
-					console.log(userCredential.user);
-					console.log(userCredential.user.email);
-					console.log(userCredential.user.uid);
-				})
-				.catch((error) => {
-					console.log('code: ' + error.code);
-					console.log('message: ' + error.message);
-				})
-		},
+		}
 	}
 }
 </script>

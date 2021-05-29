@@ -14,8 +14,11 @@
 		
 		<v-text-field
             label="Contraseña"
+			:type="show_password ? 'text' : 'password'"
+			:append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
             outlined
 			v-model="password"
+			@click:append="show_password = !show_password"
         ></v-text-field>
 
 		<v-btn 
@@ -23,29 +26,13 @@
 			color="error" 
 			elevation="3" 
 			:loading="loading"
-			@click="login"
+			@click="validate"
 		>
 			Ingresar
 		</v-btn>
 	</v-card>
 
-	<v-snackbar
-        v-model="snackbar"
-        :timeout="timeout"
-    >
-        {{ snackbar_text }}
-
-        <template v-slot:action="{ attrs }">
-            <v-btn
-                color="blue"
-                text
-                v-bind="attrs"
-                @click="snackbar = false"
-            >
-                Cerrar
-            </v-btn>
-        </template>
-    </v-snackbar>
+	<snackbar-c :text="snackbar_text" @close="snackbar_text = ''" />
 </div>
 </template>
 
@@ -55,28 +42,52 @@ import Snackbar from '../components/Snackbar'
 		name: 'login',
 
 		components: {
-			'snackbar-c': Snackbar,
+			'snackbar-c': Snackbar
 		},
 
 		data: () => ({
 			loading: false,
 			email: '',
 			password: '',
+			// email: 'pokemonarg.web@gmail.com',
+			// password: 'Pokemonarg1981',
 
-			snackbar: false,
+			show_password: false,
             snackbar_text: '',
-            timeout: 2000,
 		}),
 
 		methods: {
-			login() {
+			validate() {
 				this.loading = true;
 				if(this.email === '' || this.password === '') {
 					this.snackbar_text = 'Todos los campos son obligatorios';
-					this.snackbar = true;
 					this.loading = false;
+				}else {
+					this.login();
 				}
-			}
+			},
+			login() {
+				this.$store.getters.firebase.auth().signInWithEmailAndPassword(this.email, this.password)
+					.then((userCredential) => {
+						this.email = '';
+						this.password = '';
+						this.loading = false;
+						this.$router.push('inicio-admin');
+					})
+					.catch((error) => {
+						switch('' + error.code + '') {
+							case 'auth/invalid-email': 
+							case 'auth/user-not-found': 
+							case 'auth/wrong-password': 
+								this.snackbar_text = 'El email o la contraseña son incorrectos';
+								break;
+							default: {
+								this.snackbar_text = 'Ocurrió un error, intente nuevamente';
+							}
+						}
+						this.loading = false;
+					})
+			},
 		}
 	}
 </script>
