@@ -1,5 +1,5 @@
 <template>
-<div class="container d-flex justify-center align-center">
+<div class="container d-md-flex justify-center align-center">
     <v-hover v-for="opt in options" :key="opt">
         <template v-slot:default="{ hover }">
             <v-card
@@ -8,8 +8,8 @@
                 width="200"
                 @click="go_to_add(opt)"
                 class="rounded 
-                        pa-0 
-                        ma-8 
+                        pa-0
+                        card-option 
                         d-flex 
                         justify-center 
                         align-center
@@ -30,7 +30,7 @@
                 @click="go_to_store()"
                 class="rounded 
                         pa-0 
-                        ma-8 
+                        card-option
                         d-flex 
                         justify-center 
                         align-center
@@ -77,6 +77,10 @@
 <style scoped>
 .container {
     min-height: calc(100vh - 100px);
+}
+
+.card-option {
+    margin: 25px auto;
 }
 
 </style>

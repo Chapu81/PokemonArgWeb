@@ -1,29 +1,54 @@
 <template>
     <v-app-bar app color="error" dark>
-		<div class="d-flex align-center">
+		<!-- <div class="d-flex align-center">
 			<v-img
 				alt="Pokeball"
 				class="shrink mr-2"
 				contain
-				src="../assets/img/logo/pokeball.png"
+				src="../assets/img/logo/logo.png"
 				transition="scale-transition"
-				width="40"
+				width="50"
 			/>
-		</div>
+		</div> -->
+		<router-link to="/" class="d-flex justify-center align-center btn-logo">
+			<v-img
+				alt="Pokeball"
+				class="shrink mr-2"
+				contain
+				src="../assets/img/logo/logo.png"
+				transition="scale-transition"
+				width="50"
+			/>
 
-		<v-btn text @click="go_to_page('/')">
-			<span class="mr-2">Pokemon Arg</span>
+			<span class="mr-2 d-none d-sm-inline">Cartas Pokemon Arg</span>
+		</router-link>
+		<!-- <v-btn text @click="go_to_page('/')" class="d-flex justify-center align-center btn-logo">
+			<v-img
+				alt="Pokeball"
+				class="shrink mr-2"
+				contain
+				src="../assets/img/logo/logo.png"
+				transition="scale-transition"
+				width="50"
+			/>
+
+			<span class="mr-2 d-none d-sm-inline">Pokemon Arg</span>
+		</v-btn> -->
+
+		<v-spacer></v-spacer>
+
+		<v-btn icon>
+			<v-icon>mdi-magnify</v-icon>
 		</v-btn>
 
-		<v-spacer v-if="logued"></v-spacer>
 		<v-menu offset-y v-if="logued">
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn
-					text
+					icon
 					v-bind="attrs"
 					v-on="on"
 				>
-					<i class="material-icons">person</i>
+					<v-icon>mdi-dots-vertical</v-icon>
 				</v-btn>
 			</template>
 			<v-list class="pointer">
@@ -68,5 +93,11 @@
 </script>
 
 <style scoped>
-
+.btn-logo {
+	color: white;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-size: 16px;
+	font-weight: bold;
+}
 </style>

@@ -3,7 +3,7 @@
     <v-card
 		:elevation="3"
 		width="500"
-        height="460"
+        height="635"
 		class="rounded pa-4 ma-4"
     >
 		<!-- height="280" -->
@@ -34,7 +34,7 @@
         >
             <template v-slot:selection="{ item }">
                 <v-img
-                    alt="Pokeball"
+                    :alt="item.text"
                     class="shrink mr-2"
                     contain
                     :src="`/img/types/${item.img}.webp`"
@@ -46,7 +46,7 @@
             </template>
             <template v-slot:item="{ item }">
                 <v-img
-                    alt="Pokeball"
+                    :alt="item.text"
                     class="shrink mr-2"
                     contain
                     :src="`/img/types/${item.img}.webp`"
@@ -57,6 +57,22 @@
                 {{ item.text }}
             </template>
         </v-select>
+
+        <v-file-input
+            label="Frente"
+            v-model="file_front"
+            prepend-icon=""
+            outlined
+            @change="img_to_base64('front')"
+        ></v-file-input>
+        
+        <v-file-input
+            label="Reverso"
+            v-model="file_back"
+            prepend-icon=""
+            outlined
+            @change="img_to_base64('back')"
+        ></v-file-input>
 
         <v-checkbox
             v-model="data_card.legendary"
@@ -92,8 +108,12 @@ import Snackbar from '../../components/Snackbar'
             loading: false,
             option_selected: '',
             snackbar_text: '',
+            file_front: [],
+            file_back: [],
+
             data_card: {
-                img: 'https://images.wikidexcdn.net/mwuploads/wikidex/thumb/3/37/latest/20141220171847/Bulbasaur_%28Crystal_Guardians_45_TCG%29.jpg/245px-Bulbasaur_%28Crystal_Guardians_45_TCG%29.jpg',
+                front: '',
+                back: '',
                 name: '',
                 price: '',
                 language: '',
@@ -109,8 +129,9 @@ import Snackbar from '../../components/Snackbar'
         methods: {
             validate() {
                 this.loading = true;
-                let {name, price, language, type} = this.data_card;
-                if(name === '' || price === '' || language === '' || type === '') {
+
+                let {name, price, language, type, front, back} = this.data_card;
+                if(name === '' || price === '' || language === '' || type === '' || front.length === 0 || back.length === 0) {
                     this.snackbar_text = 'Complete todos los campos';
                     this.loading = false;
                     return false;
@@ -132,13 +153,32 @@ import Snackbar from '../../components/Snackbar'
 
             reset_data() {
                 this.data_card = {
-                    img: 'https://images.wikidexcdn.net/mwuploads/wikidex/thumb/3/37/latest/20141220171847/Bulbasaur_%28Crystal_Guardians_45_TCG%29.jpg/245px-Bulbasaur_%28Crystal_Guardians_45_TCG%29.jpg',
                     name: '',
+                    front: '',
+                    back: '',
                     price: '',
                     language: '',
                     type: '',
                     legendary: false,
                 }
+                this.file_front = [];
+                this.file_back = [];
+            },
+
+            img_to_base64(front_or_back) {
+                var file = front_or_back === 'front' ? this.file_front : this.file_back;
+                var reader  = new FileReader();
+
+                var data_card = this.data_card;
+                reader.onloadend = function () {
+                    if(front_or_back === 'front') {
+                        data_card.front = reader.result;
+                    }else {
+                        data_card.back = reader.result;
+                    }
+                }
+
+                reader.readAsDataURL(file);
             }
         },
 

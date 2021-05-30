@@ -1,32 +1,46 @@
 <template>
 <v-card
-    class="mx-auto"
-    max-width="300"
+    class="my-10 mx-3"
+    max-width="350"
 >
+    <!-- class="mx-auto my-12" -->
     <v-img
-        class="white--text align-end"
-        height="400px"
-        :src="card.img"
-    >
-        <v-card-title>{{card.name}}</v-card-title>
-    </v-img>
+        height="250"
+        :src="card.front"
+    ></v-img>
 
-    <v-card-text class="text--primary">
-        <p>Precio: ${{card.price}}</p>
+    <v-card-title class="pb-0">{{card.name}}</v-card-title>
+
+    <v-card-text class="pb-0">
+        <div class="subtitle-1 d-flex justify-space-between align-center">
+            <span class="title">
+                $ {{card.price}}
+            </span>
+            <span class="d-flex justify-center align-center">
+                Tipo: 
+                <v-img
+                    :alt="card.type"
+                    class="shrink ml-2"
+                    contain
+                    :src="`/img/types/${types[card.type]}.webp`"
+                    transition="scale-transition"
+                    width="20"
+                />
+            </span>
+        </div>
+
+        <div>
+            Legendaria: 
+            {{is_legendary}}
+        </div>
     </v-card-text>
 
-    <v-card-actions>
+    <v-card-actions class="d-flex justify-center align-center">
         <v-btn
-            color="error"
+            color="red"
             text
         >
             Agregar al carrito
-        </v-btn>
-        
-        <v-spacer v-if="logued"></v-spacer>
-        
-        <v-btn color="black" text v-if="logued" @click="delete_card">
-            <i class="material-icons">delete</i>
         </v-btn>
     </v-card-actions>
 </v-card>
@@ -59,6 +73,26 @@ import db from '../main'
         computed: {
             logued() {
                 return this.$store.getters.logued;
+            },
+
+            types() {
+                return {
+                    Incoloro: 'colorless',
+                    Oscuridad: 'darkness',
+                    Dragón: 'dragon',
+                    Hada: 'fairy',
+                    Lucha: 'fighting',
+                    Fuego: 'fire',
+                    Hierba: 'grass',
+                    Relámpago: 'lightning',
+                    Metal: 'metal',
+                    Psíquico: 'psychic',
+                    Agua: 'water',
+                }
+            },
+
+            is_legendary() {
+                return this.card.legendary ? 'Si' : 'No';
             }
         }
     }

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="d-md-flex justify-center justify-md-start align-center flex-wrap pa-4 container-cards">
 	<template v-for="card in cards">
 		<card-c :card="card" :key="card.id" @card_delete="card_delete($event)" />	
 	</template>
@@ -95,5 +95,28 @@ p {
 }
 li {
 	margin: 15px;
+}
+
+.container-cards {
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+@media screen and (min-width: 960px) {
+	.container-cards {
+		max-width: 800px;
+	}
+}
+
+@media screen and (min-width: 1200px) {
+	.container-cards {
+		max-width: 1160px;
+	}
+}
+
+@media screen and (min-width: 1530px) {
+	.container-cards {
+		max-width: 1530px;
+	}
 }
 </style>
