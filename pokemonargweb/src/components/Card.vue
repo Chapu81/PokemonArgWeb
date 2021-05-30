@@ -3,11 +3,13 @@
     class="my-10 mx-3"
     max-width="350"
 >
-    <!-- class="mx-auto my-12" -->
-    <v-img
-        height="250"
-        :src="card.front"
-    ></v-img>
+    <v-carousel show-arrows-on-hover height="250" hide-delimiters>
+        <v-carousel-item
+            v-for="(item,i) in [card.front, card.back]"
+            :key="i"
+            :src="item"
+        ></v-carousel-item>
+    </v-carousel>
 
     <v-card-title class="pb-0">{{card.name}}</v-card-title>
 
