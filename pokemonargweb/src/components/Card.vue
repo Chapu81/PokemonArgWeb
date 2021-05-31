@@ -3,13 +3,47 @@
     class="my-10 mx-3"
     max-width="350"
 >
-    <v-carousel show-arrows-on-hover height="250" hide-delimiters>
+    <v-dialog max-width="800">
+        <template v-slot:activator="{ on, attrs }">
+            <div v-bind="attrs" v-on="on" @click="active_carousel">
+                <v-carousel show-arrows-on-hover height="250" hide-delimiters>
+                    <v-carousel-item
+                        v-for="(item,i) in [card.front, card.back]"
+                        :key="i"
+                        :src="item"
+                    ></v-carousel-item>
+                </v-carousel>
+            </div>
+        </template>
+        <!-- <template v-slot:default="dialog"> -->
+        <template>
+            <v-card>
+                <v-card-text class="pa-0">
+                    <div>
+                        <v-carousel hide-delimiters max-height="800">
+                            <v-carousel-item
+                                v-for="(item,i) in carousel_modal"
+                                :key="i"
+                                :src="item"
+                            ></v-carousel-item>
+                        </v-carousel>
+                    </div>
+                </v-card-text>
+                <!-- <v-card-actions class="justify-end">
+                    <v-btn text @click="dialog.value = false" >
+                        Cerrar
+                    </v-btn>
+                </v-card-actions> -->
+            </v-card>
+        </template>
+    </v-dialog>
+    <!-- <v-carousel show-arrows-on-hover height="250" hide-delimiters>
         <v-carousel-item
             v-for="(item,i) in [card.front, card.back]"
             :key="i"
             :src="item"
         ></v-carousel-item>
-    </v-carousel>
+    </v-carousel> -->
 
     <v-card-title class="pb-0">{{card.name}}</v-card-title>
 
@@ -57,9 +91,16 @@ import db from '../main'
 
         data: () => ({
             snackbar_text: '',
+            view_carousel: false,
         }),
 
         methods: {
+            active_carousel() {
+                setTimeout(() => {
+                    this.view_carousel = true;
+                }, 0);
+            },
+
             async delete_card() {
                 try {
                     await db.collection('cards').doc(this.card.id).delete();
@@ -73,6 +114,10 @@ import db from '../main'
         },
 
         computed: {
+            carousel_modal() {
+                return this.view_carousel ? [this.card.front, this.card.back] : [];
+            },
+
             logued() {
                 return this.$store.getters.logued;
             },
