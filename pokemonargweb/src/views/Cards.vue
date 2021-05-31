@@ -1,10 +1,24 @@
 <template>
-<div class="d-md-flex justify-center justify-md-start align-center flex-wrap pa-4 container-cards">
-	<template v-for="card in cards">
-		<card-c :card="card" :key="card.id" @card_delete="card_delete($event)" />	
-	</template>
+<div>
+	<div class="d-md-flex justify-center justify-md-start align-center flex-wrap pa-4 container-cards hidden-load" >
+		<template v-for="card in cards">
+			<card-c 
+				:card="card" 
+				:key="card.id" 
+				@card_delete="card_delete($event)" 
+				@card_loaded="card_loaded++" />	
+		</template>
 
-	<snackbar-c :text="snackbar_text" @close="snackbar_text = ''" />
+		<snackbar-c :text="snackbar_text" @close="snackbar_text = ''" />
+	</div>
+	<v-progress-circular
+		:size="70"
+		:width="7"
+		color="red"
+		indeterminate
+		class="spinner"
+		v-if="!loaded"
+    ></v-progress-circular>
 </div>
 </template>
 
@@ -24,7 +38,17 @@ export default {
 	data: () => ({
 		cards: [],
 		snackbar_text: '',
+		card_loaded: 0,
+		loaded: false,
 	}),
+
+	watch: {
+		card_loaded() {
+			if(this.card_loaded > 0 && !this.loaded) {
+				this.loaded = true
+			}
+		}
+	},
 
 	created() {
 		this.get_cards();
@@ -100,6 +124,12 @@ li {
 .container-cards {
 	max-width: 400px;
 	margin: 0 auto;
+}
+
+.spinner {
+	position: absolute;
+	top: calc(50vh - 80px);
+	left: calc(50vw - 35px);
 }
 
 @media screen and (min-width: 960px) {

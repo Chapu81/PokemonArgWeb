@@ -1,75 +1,82 @@
 <template>
-    <v-app-bar app color="error" dark>
-		<!-- <div class="d-flex align-center">
-			<v-img
-				alt="Pokeball"
-				class="shrink mr-2"
-				contain
-				src="../assets/img/logo/logo.png"
-				transition="scale-transition"
-				width="50"
-			/>
-		</div> -->
-		<router-link to="/" class="d-flex justify-center align-center btn-logo">
-			<v-img
-				alt="Pokeball"
-				class="shrink mr-2"
-				contain
-				src="../assets/img/logo/logo.png"
-				transition="scale-transition"
-				width="50"
-			/>
+<div>
+    <v-app-bar
+		color="error"
+		dense
+		dark
+    >
+		<v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
-			<span class="mr-2 d-none d-sm-inline">Cartas Pokemon Arg</span>
-		</router-link>
-		<!-- <v-btn text @click="go_to_page('/')" class="d-flex justify-center align-center btn-logo">
-			<v-img
-				alt="Pokeball"
-				class="shrink mr-2"
-				contain
-				src="../assets/img/logo/logo.png"
-				transition="scale-transition"
-				width="50"
-			/>
-
-			<span class="mr-2 d-none d-sm-inline">Pokemon Arg</span>
-		</v-btn> -->
+		<v-toolbar-title class="title-nav pl-0 subtitle-1">Cartas Pokemon Arg</v-toolbar-title>
+		<v-toolbar-title class="title-nav pl-0">Cartas Pokemon Arg</v-toolbar-title>
 
 		<v-spacer></v-spacer>
 
 		<v-btn icon>
 			<v-icon>mdi-magnify</v-icon>
 		</v-btn>
-
-		<v-menu offset-y v-if="logued">
-			<template v-slot:activator="{ on, attrs }">
-				<v-btn
-					icon
-					v-bind="attrs"
-					v-on="on"
-				>
-					<v-icon>mdi-dots-vertical</v-icon>
-				</v-btn>
-			</template>
-			<v-list class="pointer">
-				<!-- <v-list-item @click="$router.push('/inicio-admin')"> -->
-				<v-list-item @click="go_to_page('/inicio-admin')">
-					<v-list-item-title>Admin</v-list-item-title>
-				</v-list-item>
-				<v-list-item @click="logout">
-					<v-list-item-title>Cerrar sesión</v-list-item-title>
-				</v-list-item>
-			</v-list>
-		</v-menu>
+		<v-btn icon>
+			<v-icon>mdi-cart</v-icon>
+		</v-btn>
     </v-app-bar>
+
+	<v-navigation-drawer
+		v-model="drawer"
+		absolute
+		temporary
+    >
+
+		<v-list-item>
+			<v-list-item-content>
+				<v-img
+					alt="Pokeball"
+					class="shrink mx-auto"
+					contain
+					src="../assets/img/logo/logo.png"
+					transition="scale-transition"
+					max-width="150"
+				/>
+			</v-list-item-content>
+		</v-list-item>
+
+		<v-divider></v-divider>
+
+		<v-list
+			nav
+			dense
+		>
+			<v-list-item-group v-model="group">
+				<template v-for="(section, key) in section_list">
+					<v-list-item :key="key">
+						<v-list-item-title class="ml-4 subtitle-2" @click="go_to_page(section.link)">
+							{{section.text}}
+						</v-list-item-title>
+					</v-list-item>
+				</template>
+
+				<v-list-item v-if="logued">
+					<v-list-item-title class="ml-4 subtitle-2" @click="logout">
+						Cerrar sesión
+					</v-list-item-title>
+				</v-list-item>
+			</v-list-item-group>
+		</v-list>
+    </v-navigation-drawer>
+</div>
 </template>
 
 <script>
     export default {
         name: 'navbar',
 
+		data: () => ({
+			drawer: false,
+			group: null,
+		}),
+
         methods: {
 			go_to_page(page) {
+				console.log(this.$route.fullPath);
 				if(this.$route.fullPath != page) {
 					this.$router.push(page)
 				}
@@ -87,7 +94,29 @@
         computed: {
             logued() {
                 return this.$store.getters.logued;
-            }
+            },
+
+			section_list() {
+				let res = [
+					{
+						text: 'Inicio',
+						link: '/'
+					},
+					{
+						text: 'Cartas',
+						link: '/cartas'
+					},
+				];
+
+				if(this.logued) {
+					res.push({
+						text: 'Admin',
+						link: '/inicio-admin'
+					});
+				}
+
+				return res;
+			}
         }
     }
 </script>
@@ -99,5 +128,18 @@
 	text-decoration: none;
 	font-size: 16px;
 	font-weight: bold;
+}
+
+.title-nav.subtitle-1 {
+	display: none;
+}
+
+@media screen and (max-width: 600px){
+	.title-nav {
+		display: none;
+	}
+	.title-nav.subtitle-1 {
+		display: inline;
+	}
 }
 </style>
