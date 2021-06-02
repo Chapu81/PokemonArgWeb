@@ -3,6 +3,7 @@
     <v-app-bar
 		color="error"
 		dense
+		fixed
 		dark
     >
 		<v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
@@ -15,8 +16,19 @@
 		<v-btn icon>
 			<v-icon>mdi-magnify</v-icon>
 		</v-btn>
-		<v-btn icon>
+		<!-- <v-btn icon>
 			<v-icon>mdi-cart</v-icon>
+		</v-btn> -->
+		<v-btn icon>
+			<v-badge
+				:content="items_shop"
+				:value="items_shop"
+				color="blue"
+				overlap
+			>
+			
+				<v-icon>mdi-cart</v-icon>
+			</v-badge>
 		</v-btn>
     </v-app-bar>
 
@@ -27,7 +39,7 @@
     >
 
 		<v-list-item>
-			<v-list-item-content>
+			<v-list-item-content height="175">
 				<v-img
 					alt="Pokeball"
 					class="shrink mx-auto"
@@ -72,6 +84,7 @@
 		data: () => ({
 			drawer: false,
 			group: null,
+			items_shop: 0
 		}),
 
         methods: {
@@ -133,6 +146,10 @@
 .title-nav.subtitle-1 {
 	display: none;
 }
+
+/* .bg-red {
+	min-height: 175px;
+} */
 
 @media screen and (max-width: 600px){
 	.title-nav {

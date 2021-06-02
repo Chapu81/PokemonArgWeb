@@ -186,12 +186,14 @@ import Snackbar from '../../components/Snackbar'
             language_select() {
                 return [
                     'Alemán',
+                    'Coreano',
                     'Español',
                     'Francés',
                     'Holandés',
                     'Inglés',
                     'Italiano',
                     'Japonés',
+                    'Portugués',
                 ];
             },
             
