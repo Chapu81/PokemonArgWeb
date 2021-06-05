@@ -7,6 +7,9 @@ export default new Vuex.Store({
   state: {
     logued_user: false,
     firebase: null,
+    mobile: false,
+    shopping_cart: [],
+    count_shopping_cart: 0,
   },
   mutations: {
     log_state (state, user) {
@@ -15,7 +18,18 @@ export default new Vuex.Store({
     
     set_firebase (state, value) {
       state.firebase = value
-    }
+    },
+    
+    set_mobile (state, bool) {
+      state.mobile = bool
+    },
+    
+    set_count_shopping_cart (state, {action, amount, card}) {
+      state.count_shopping_cart = action
+                          ? state.count_shopping_cart + amount
+                          : state.count_shopping_cart - amount;
+      state.shopping_cart.push(card);
+    },
   },
   actions: {
   },
@@ -28,6 +42,18 @@ export default new Vuex.Store({
     
     firebase: state => {
       return state.firebase;
+    },
+    
+    mobile: state => {
+      return state.mobile;
+    },
+    
+    count_shopping_cart: state => {
+      return state.count_shopping_cart;
+    },
+    
+    shopping_cart: state => {
+      return state.shopping_cart;
     },
   }
 })

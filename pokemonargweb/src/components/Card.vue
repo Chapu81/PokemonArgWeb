@@ -166,6 +166,15 @@ import db from '../main'
             push_shop() {
                 if(!this.btn_active) {
                     this.btn_active = true;
+                    let data = {
+                        amount: this.count, 
+                        action: true,
+                        card: {
+                            ...this.card,
+                            amount: this.count
+                        }
+                    };
+                    this.$store.commit('set_count_shopping_cart', data);
 
                     setTimeout(() => {
                         this.btn_active = false;

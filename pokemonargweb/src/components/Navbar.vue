@@ -21,8 +21,8 @@
 		</v-btn> -->
 		<v-btn icon>
 			<v-badge
-				:content="items_shop"
-				:value="items_shop"
+				:content="count_shopping_cart"
+				:value="count_shopping_cart"
 				color="blue"
 				overlap
 			>
@@ -34,7 +34,7 @@
 
 	<v-navigation-drawer
 		v-model="drawer"
-		absolute
+		fixed
 		temporary
     >
 
@@ -84,7 +84,6 @@
 		data: () => ({
 			drawer: false,
 			group: null,
-			items_shop: 0
 		}),
 
         methods: {
@@ -107,6 +106,10 @@
         computed: {
             logued() {
                 return this.$store.getters.logued;
+            },
+            
+			count_shopping_cart() {
+                return this.$store.getters.count_shopping_cart;
             },
 
 			section_list() {
