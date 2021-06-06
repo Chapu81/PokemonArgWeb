@@ -1,11 +1,11 @@
 <template>
-<div class="container d-md-flex justify-center align-center">
+<div class="container d-sm-flex justify-center align-center">
     <v-hover v-for="opt in options" :key="opt">
         <template v-slot:default="{ hover }">
             <v-card
                 :elevation="hover ? 8 : 3"
                 height="150"
-                width="200"
+                width="175"
                 @click="go_to_add(opt)"
                 class="rounded 
                         pa-0
@@ -26,7 +26,7 @@
             <v-card
                 :elevation="hover ? 8 : 3"
                 height="150"
-                width="200"
+                width="175"
                 @click="go_to_store()"
                 class="rounded 
                         pa-0 
@@ -67,7 +67,6 @@
                 return [
                     'cartas',
                     'mazos',
-                    'combos'
                 ];
             }
         }

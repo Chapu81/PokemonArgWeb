@@ -5,15 +5,22 @@
     <v-main>
 		<router-view />
     </v-main>
+
+	<user-c />
+	<cart-c />
 </v-app>
 </template>
 
 <script>
 import Navbar from './components/Navbar'
+import Cart from './components/Cart'
+import User from './components/User'
 export default {
 	name: "App",
 	components: {
 		'navbar-c': Navbar,
+		'cart-c': Cart,
+		'user-c': User,
 	},
 
 	beforeMount() {
@@ -32,14 +39,5 @@ export default {
 </script>
 
 <style scoped>
-	.v-main {
-		padding-top: 45px!important;
-	}
-
-	@media screen and (min-width: 1440px) {
-		.v-main {
-			width: 1440px;
-			margin: 0 auto;
-		}
-	}
+	
 </style>

@@ -10,6 +10,7 @@
             label="Email"
             outlined
 			v-model="email"
+			@keyup.enter="validate"
         ></v-text-field>
 		
 		<v-text-field
@@ -18,6 +19,7 @@
 			:append-icon="show_password ? 'mdi-eye' : 'mdi-eye-off'"
             outlined
 			v-model="password"
+			@keyup.enter="validate"
 			@click:append="show_password = !show_password"
         ></v-text-field>
 

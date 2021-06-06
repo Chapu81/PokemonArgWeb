@@ -1,6 +1,6 @@
 <template>
 <div>
-	<v-carousel :show-arrows="false" cycle>
+	<v-carousel :show-arrows="false" cycle height="auto">
 		<v-carousel-item
 			v-for="i in 3"
 			:key="i"
