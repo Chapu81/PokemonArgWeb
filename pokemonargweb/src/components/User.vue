@@ -20,7 +20,7 @@
         </v-btn>
     </template>
 
-    <v-list>
+    <v-list class="pointer">
         <v-list-item
             v-for="(section, i) in sections"
             :key="i"

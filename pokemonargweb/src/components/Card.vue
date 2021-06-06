@@ -16,7 +16,7 @@
                 </v-carousel>
             </div>
         </template>
-        <!-- <template v-slot:default="dialog"> -->
+
         <template>
             <v-card>
                 <v-card-text class="pa-0">
@@ -41,24 +41,6 @@
         <div class="subtitle-1 d-flex justify-space-between align-center">
             <span class="title">
                 $ {{card.price}}
-            </span>
-            <span class="d-flex justify-center align-center">
-                Tipo: 
-                <v-img
-                    :alt="card.type"
-                    class="shrink ml-2"
-                    contain
-                    :src="`/img/types/${types[card.type]}.webp`"
-                    transition="scale-transition"
-                    width="20"
-                />
-            </span>
-        </div>
-
-        <div class="d-flex justify-space-between align-center mt-1">
-            <span>
-                Legendaria:
-                {{is_legendary}}
             </span>
             <div class="cantidad">
                 <v-btn
@@ -101,6 +83,22 @@
                 </v-btn>
             </div>
         </div>
+
+        <div class="d-flex justify-space-between align-center mt-1">
+            <span class="d-flex justify-center align-center">
+                Tipo: 
+                <v-img
+                    :alt="card.type"
+                    class="shrink ml-2"
+                    contain
+                    :src="`/img/types/${types[card.type]}.webp`"
+                    transition="scale-transition"
+                    width="20"
+                />
+            </span>
+
+            <delete-item @delete_card="delete_card" />
+        </div>
     </v-card-text>
 
     <v-card-actions class="d-flex justify-center align-center">
@@ -124,10 +122,14 @@
 
 <script>
 import db from '../main'
+import Delete_item from './Delete_item.vue'
     export default {
         name: 'Card',
-
         props: ['card'],
+
+        components: {
+            'delete-item': Delete_item,
+        },
 
         data: () => ({
             snackbar_text: '',
@@ -241,10 +243,6 @@ import db from '../main'
                     Agua: 'water',
                 }
             },
-
-            is_legendary() {
-                return this.card.legendary ? 'Si' : 'No';
-            }
         }
     }
 </script>

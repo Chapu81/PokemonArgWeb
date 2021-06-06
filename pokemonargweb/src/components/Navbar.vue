@@ -5,7 +5,7 @@
 		dark
     >
 		<v-toolbar-title 
-			class="pl-0 logo" 
+			class="pl-0 pointer" 
 			@click="go_to_page('/')"
 		>
 			<v-img
@@ -85,10 +85,6 @@
 </script>
 
 <style scoped>
-.logo {
-	cursor: pointer;
-}
-
 @media screen and (max-width: 600px){
 	.buttons-sections {
 		padding: 0 8px!important;
