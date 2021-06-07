@@ -74,7 +74,7 @@ import Snackbar from '../components/Snackbar'
 						this.email = '';
 						this.password = '';
 						this.loading = false;
-						this.$router.push('inicio-admin');
+						this.$router.push('/cartas');
 					})
 					.catch((error) => {
 						switch('' + error.code + '') {
