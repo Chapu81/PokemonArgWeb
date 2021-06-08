@@ -1,25 +1,28 @@
 <template>
 <div>
-    <!-- <add-card /> -->
-    <component :is="option_selected === 'cartas' ? 'add-card' : ''"></component>
+    <component :is="is_card ? 'add-card' : 'add-deck'"></component>
 </div>
 </template>
 
 <script>
 import Add_card from '../../components/admin/Add_card.vue'
+import Add_deck from '../../components/admin/Add_deck.vue'
     export default {
         name: 'add',
         components: {
-            'add-card': Add_card
+            'add-card': Add_card,
+            'add-deck': Add_deck,
         },
 
         data: () => ({
-            option_selected: '',
+            
         }),
 
-        created() {
-            this.option_selected = this.$route.params.opt;
-        },
+        computed: {
+            is_card() {
+                return this.$route.params.opt === 'cartas';
+            }
+        }
     }
 </script>
 

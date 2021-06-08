@@ -10,7 +10,7 @@
             label="Nombre"
             dense
             outlined
-			v-model="data_card.name"
+			v-model="data_deck.name"
         ></v-text-field>
 		
 		<v-text-field
@@ -19,7 +19,7 @@
             min="1"
             type="number"
             outlined
-			v-model="data_card.price"
+			v-model="data_deck.price"
         ></v-text-field>
 		
         <v-text-field
@@ -28,67 +28,22 @@
             min="1"
             type="number"
             outlined
-			v-model="data_card.stock"
+			v-model="data_deck.stock"
         ></v-text-field>
 		
         <v-select
             :items="language_select"
-            v-model="data_card.language"
+            v-model="data_deck.language"
             label="Idioma"
             dense
             outlined
         ></v-select>
-        
-        <v-select
-            :items="type_select"
-            v-model="data_card.type"
-            label="Tipo"
-            dense
-            outlined
-        >
-            <template v-slot:selection="{ item }">
-                <v-img
-                    :alt="item.text"
-                    class="shrink mr-2"
-                    contain
-                    :src="`/img/types/${item.img}.webp`"
-                    transition="scale-transition"
-                    width="20"
-                />
-                    <!-- :src="`../../assets/img/types/${item.img}.webp`" -->
-                {{ item.text }}
-            </template>
-            <template v-slot:item="{ item }">
-                <v-img
-                    :alt="item.text"
-                    class="shrink mr-2"
-                    contain
-                    :src="`/img/types/${item.img}.webp`"
-                    transition="scale-transition"
-                    width="20"
-                />
-                    <!-- :src="`../../assets/img/types/${item.img}.webp`" -->
-                {{ item.text }}
-            </template>
-        </v-select>
 
-        <v-file-input
-            label="Frente"
-            dense
-            v-model="file_front"
-            prepend-icon=""
+        <v-textarea
             outlined
-            @change="img_to_base64('front')"
-        ></v-file-input>
-        
-        <v-file-input
-            label="Reverso"
-            dense
-            v-model="file_back"
-            prepend-icon=""
-            outlined
-            @change="img_to_base64('back')"
-        ></v-file-input>
+            v-model="data_deck.description"
+            label="Descripción"
+        ></v-textarea>
 
 		<v-btn 
 			block 
@@ -109,7 +64,7 @@
 import db from '../../main'
 import Snackbar from '../Snackbar.vue'
     export default {
-        name: 'addcard',
+        name: 'adddeck',
 
         components: {
 			'snackbar-c': Snackbar
@@ -118,17 +73,14 @@ import Snackbar from '../Snackbar.vue'
         data: () => ({
             loading: false,
             snackbar_text: '',
-            file_front: [],
-            file_back: [],
+            files: [],
 
-            data_card: {
-                front: '',
-                back: '',
+            data_deck: {
                 name: '',
                 price: '',
                 stock: 1,
                 language: '',
-                type: '',
+                description: '',
             }
         }),
 
@@ -136,9 +88,9 @@ import Snackbar from '../Snackbar.vue'
             validate() {
                 this.loading = true;
 
-                let {name, price, language, type, front, back, stock} = this.data_card;
+                let {name, price, language, description, stock} = this.data_deck;
 
-                if(name === '' || price === '' || !parseInt(stock) || language === '' || type === '' || front.length === 0 || back.length === 0) {
+                if(name === '' || price === '' || !parseInt(stock) || language === '' || description === '') {
                     this.snackbar_text = 'Complete todos los campos';
                     this.loading = false;
                     return false;
@@ -149,12 +101,12 @@ import Snackbar from '../Snackbar.vue'
                     this.loading = false;
                     return false;
                 }
-                this.add_card();
+                this.add_deck();
             },
 
-            async add_card() {
+            async add_deck() {
                 try {
-                    await db.collection('cards').add(this.data_card);
+                    await db.collection('decks').add(this.data_deck);
                     this.snackbar_text = 'Datos cargados correctamente';
                     this.reset_data();
                     this.loading = false;
@@ -165,34 +117,31 @@ import Snackbar from '../Snackbar.vue'
             },
 
             reset_data() {
-                this.data_card = {
+                this.data_deck = {
                     name: '',
-                    front: '',
-                    back: '',
                     price: '',
                     stock: '',
                     language: '',
-                    type: '',
+                    description: '',
                 }
-                this.file_front = [];
-                this.file_back = [];
+                this.files = [];
             },
 
-            img_to_base64(front_or_back) {
+            /* img_to_base64(front_or_back) {
                 var file = front_or_back === 'front' ? this.file_front : this.file_back;
                 var reader  = new FileReader();
 
-                var data_card = this.data_card;
+                var data_deck = this.data_deck;
                 reader.onloadend = function () {
                     if(front_or_back === 'front') {
-                        data_card.front = reader.result;
+                        data_deck.front = reader.result;
                     }else {
-                        data_card.back = reader.result;
+                        data_deck.back = reader.result;
                     }
                 }
 
                 reader.readAsDataURL(file);
-            }
+            } */
         },
 
         computed: {
