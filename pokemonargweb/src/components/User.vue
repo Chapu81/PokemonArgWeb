@@ -8,7 +8,7 @@
     <template v-slot:activator="{ on, attrs }">
         <v-btn
             elevation="4"
-            color="error"
+            :color="$store.getters.color_app"
             v-bind="attrs"
             v-on="on"
             fab

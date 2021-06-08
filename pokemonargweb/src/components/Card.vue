@@ -103,7 +103,7 @@
 
     <v-card-actions class="d-flex justify-center align-center">
         <v-btn
-            :color="btn_active ? 'success' :'error'"
+            :color="btn_active ? 'success' : $store.getters.color_app"
             depressed
             elevation="2"
             class="push-btn"

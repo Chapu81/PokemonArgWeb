@@ -10,6 +10,7 @@ export default new Vuex.Store({
     mobile: false,
     shopping_cart: [],
     count_shopping_cart: 0,
+    color_app: 'error',
   },
   mutations: {
     log_state (state, user) {
@@ -54,6 +55,10 @@ export default new Vuex.Store({
     
     shopping_cart: state => {
       return state.shopping_cart;
+    },
+    
+    color_app: state => {
+      return state.color_app;
     },
   }
 })

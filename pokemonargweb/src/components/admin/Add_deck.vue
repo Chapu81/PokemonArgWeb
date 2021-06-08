@@ -47,7 +47,7 @@
 
 		<v-btn 
 			block 
-			color="error" 
+			:color="$store.getters.color_app" 
 			elevation="3" 
 			:loading="loading"
             @click="validate"

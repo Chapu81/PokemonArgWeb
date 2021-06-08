@@ -1,7 +1,7 @@
 <template>
 <div>
     <v-app-bar
-		color="error"
+		:color="$store.getters.color_app"
 		dark
     >
 		<v-toolbar-title 
