@@ -8,7 +8,7 @@
             <div v-bind="attrs" v-on="on" @click="active_carousel">
                 <v-carousel show-arrows-on-hover height="250" hide-delimiters>
                     <v-carousel-item
-                        v-for="(item,i) in [card.front, card.back]"
+                        v-for="(item,i) in card.imgs"
                         :key="i"
                         :src="item"
                         @load="emit_loaded"
@@ -221,7 +221,7 @@ import Delete_item from './Delete_item.vue'
 
         computed: {
             carousel_modal() {
-                return this.view_carousel ? [this.card.front, this.card.back] : [];
+                return this.view_carousel ? this.card.imgs : [];
             },
 
             logued() {
