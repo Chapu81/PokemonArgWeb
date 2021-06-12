@@ -190,7 +190,7 @@ import Delete_item from './Delete_item.vue'
             push_shop() {
                 if(!this.btn_active) {
                     if(this.card_pushed) {
-                        if(this.card_pushed.stock <= this.card_pushed.amount) {
+                        if(this.card_pushed.stock < (this.card_pushed.amount + this.count)) {
                             this.show_tooltip_button();
                             return false;
                         }
