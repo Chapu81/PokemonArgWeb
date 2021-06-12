@@ -31,6 +31,11 @@ export default new Vuex.Store({
                           : state.count_shopping_cart - amount;
       state.shopping_cart.push(card);
     },
+    
+    empty_count_shopping_cart (state) {
+      state.count_shopping_cart = 0;
+      state.shopping_cart = [];
+    },
   },
   actions: {
   },

@@ -3,6 +3,7 @@
     v-model="dialog"
     fullscreen
     hide-overlay
+    class="pb-5"
     transition="dialog-bottom-transition"
 >
     <template v-slot:activator="{ on, attrs }">
@@ -41,66 +42,39 @@
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-toolbar>
-        <v-list
-            three-line
-            subheader
-        >
-            <v-subheader>User Controls</v-subheader>
-            <v-list-item>
-                <v-list-item-content>
-                    <v-list-item-title>Content filtering</v-list-item-title>
-                    <v-list-item-subtitle>Set the content filtering level to restrict apps that can be downloaded</v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-                <v-list-item-content>
-                    <v-list-item-title>Password</v-list-item-title>
-                    <v-list-item-subtitle>Require password for purchase or use password to restrict purchase</v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list>
+        <p class="ma-5 text-center">Recordá que por el momento todas las compras que realices por la página seran únicamente una reserva de la misma. Una vez finalizada la reserva nos podremos en contacto contigo para coordinar la entrega y el medio de pago</p>
         <v-divider></v-divider>
-        <v-list
-            three-line
-            subheader
-        >
-            <v-subheader>General</v-subheader>
-            <v-list-item>
-                <v-list-item-action>
-                    <v-checkbox v-model="notifications"></v-checkbox>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>Notifications</v-list-item-title>
-                    <v-list-item-subtitle>Notify me about updates to apps or games that I downloaded</v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-                <v-list-item-action>
-                    <v-checkbox v-model="sound"></v-checkbox>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>Sound</v-list-item-title>
-                    <v-list-item-subtitle>Auto-update apps at any time. Data charges may apply</v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-            <v-list-item>
-                <v-list-item-action>
-                    <v-checkbox v-model="widgets"></v-checkbox>
-                </v-list-item-action>
-                <v-list-item-content>
-                    <v-list-item-title>Auto-add widgets</v-list-item-title>
-                    <v-list-item-subtitle>Automatically add home screen widgets</v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-        </v-list>
+        <div class="vaciar">
+            <v-btn
+                text
+                class="mt-4"
+                @click="empty_cart"
+            >
+                Vaciar carrito
+            </v-btn>
+        </div>
+        
+        <ul class="pa-4 pt-0">
+            <template v-for="(card, key) in shopping_cart">
+                <card-cart :key="key" :card="card" />
+            </template>
+        </ul>
+
+
+        
     </v-card>
 
 </v-dialog>
 </template>
 
 <script>
+import card_cart from './Card_cart.vue'
 export default {
     name: 'Cart',
+
+    components: {
+        'card-cart': card_cart,
+    },
 
     data: () => ({
         dialog: false,
@@ -109,9 +83,20 @@ export default {
         widgets: false,
     }),
 
+    methods: {
+        empty_cart() {
+            this.$store.commit('empty_count_shopping_cart');
+            this.dialog = false;
+        }
+    },
+
     computed: {
         count_shopping_cart() {
             return this.$store.getters.count_shopping_cart;
+        },
+        
+        shopping_cart() {
+            return this.$store.getters.shopping_cart;
         },
         
         color_app() {
@@ -122,5 +107,17 @@ export default {
 </script>
 
 <style scoped>
-
+.vaciar {
+    text-align: right;
+}
+@media screen and (min-width: 650px) {
+    ul {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+}
 </style>

@@ -13,7 +13,18 @@
 				title="Borrar"
 				class="mr-5"
 			>
+				<template v-slot:activator="{ on, attrs }">
+			<v-btn
+				icon
+				:loading="loading"
+				v-bind="attrs"
+				v-on="on"
+				title="Borrar"
+				class="mr-5"
+			>
 				<v-icon>mdi-delete</v-icon>
+			</v-btn>
+		</template>
 			</v-btn>
 		</template>
 

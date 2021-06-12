@@ -185,8 +185,8 @@ import Delete_item from './Delete_item.vue'
             },
 
             validate_max_count() {
-                if(this.count > 10) {
-                    this.count = 10;
+                if(this.count > this.card.stock) {
+                    this.count = this.card.stock;
                     this.show_tooltip_input();
                 }
             },
@@ -206,7 +206,7 @@ import Delete_item from './Delete_item.vue'
 
             edit_count(action) {
                 if(action === 'plus') {
-                    if(this.count < 10) {
+                    if(this.count < this.card.stock) {
                         this.count++;
                     }else {
                         this.show_tooltip_input();
