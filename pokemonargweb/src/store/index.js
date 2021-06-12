@@ -29,7 +29,30 @@ export default new Vuex.Store({
       state.count_shopping_cart = action
                           ? state.count_shopping_cart + amount
                           : state.count_shopping_cart - amount;
-      state.shopping_cart.push(card);
+      // state.shopping_cart.push(card);
+      this.commit('set_shopping_cart', {card});
+    },
+
+    set_shopping_cart (state, {id, amount, card}) {
+      if(card) {
+        let position = state.shopping_cart.findIndex(el => el.id === card.id);
+        if(position == -1) {
+          state.shopping_cart.push(card);
+        }else {
+          state.shopping_cart[position].amount += card.amount;
+        }
+      }else {
+        let position = state.shopping_cart.findIndex(el => el.id === id);
+        let dif = amount - state.shopping_cart[position].amount;
+        state.shopping_cart[position].amount = amount;
+        state.count_shopping_cart += dif;
+      }
+    },
+    
+    delete_card_shopping_cart (state, id) {
+      let position = state.shopping_cart.findIndex(el => el.id === id);
+      let card_deleted = state.shopping_cart.splice(position, 1);
+      state.count_shopping_cart -= card_deleted[0].amount;
     },
     
     empty_count_shopping_cart (state) {
@@ -38,6 +61,10 @@ export default new Vuex.Store({
     },
   },
   actions: {
+    check_push_shopping(context, id) {
+      
+    }
+
   },
   modules: {
   },
@@ -60,6 +87,10 @@ export default new Vuex.Store({
     
     shopping_cart: state => {
       return state.shopping_cart;
+    },
+
+    shopping_cart_id: (state) => (id) => {
+      return state.shopping_cart.find(card => card.id === id)
     },
     
     color_app: state => {

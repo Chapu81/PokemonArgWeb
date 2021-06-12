@@ -102,7 +102,7 @@
     </v-card-text>
 
     <v-card-actions class="d-flex justify-center align-center">
-        <v-btn
+<!--         <v-btn
             :color="btn_active ? 'success' : $store.getters.color_app"
             depressed
             elevation="2"
@@ -115,7 +115,28 @@
             <v-icon v-else>
                 mdi-check
             </v-icon>
-        </v-btn>
+        </v-btn> -->
+
+        <v-tooltip top v-model="state_tooltip_button">
+            <template v-slot:activator="{ attrs }">
+                <v-btn
+                    :color="btn_active ? 'success' : $store.getters.color_app"
+                    depressed
+                    v-bind="attrs"
+                    elevation="2"
+                    class="push-btn"
+                    @click="push_shop"
+                >
+                    <span v-if="!btn_active">
+                        Agregar al carrito
+                    </span>
+                    <v-icon v-else>
+                        mdi-check
+                    </v-icon>
+                </v-btn>
+            </template>
+            <span>Ya agregaste el máximo disponible</span>
+        </v-tooltip>
     </v-card-actions>
 </v-card>
 </template>
@@ -138,6 +159,7 @@ import Delete_item from './Delete_item.vue'
             btn_active: false,
             count: 1,
             state_tooltip_input: false,
+            state_tooltip_button: false,
         }),
 
         methods: {
@@ -167,7 +189,14 @@ import Delete_item from './Delete_item.vue'
 
             push_shop() {
                 if(!this.btn_active) {
+                    if(this.card_pushed) {
+                        if(this.card_pushed.stock <= this.card_pushed.amount) {
+                            this.show_tooltip_button();
+                            return false;
+                        }
+                    }
                     this.btn_active = true;
+
                     let data = {
                         amount: this.count, 
                         action: true,
@@ -180,6 +209,7 @@ import Delete_item from './Delete_item.vue'
 
                     setTimeout(() => {
                         this.btn_active = false;
+                        this.count = 1;
                     }, 1000);
                 }
             },
@@ -202,6 +232,13 @@ import Delete_item from './Delete_item.vue'
                 setTimeout(() => {
                     this.state_tooltip_input = false;
                 }, 1000);
+            },
+            
+            show_tooltip_button() {
+                this.state_tooltip_button = true;
+                setTimeout(() => {
+                    this.state_tooltip_button = false;
+                }, 2500);
             },
 
             edit_count(action) {
@@ -226,6 +263,10 @@ import Delete_item from './Delete_item.vue'
 
             logued() {
                 return this.$store.getters.logued;
+            },
+            
+            card_pushed() {
+                return this.$store.getters.shopping_cart_id(this.card.id);
             },
 
             types() {

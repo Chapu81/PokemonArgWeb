@@ -47,6 +47,7 @@
     </div>
     <v-btn
         icon
+        @click="delete_cart"
     >
         <v-icon>mdi-delete</v-icon>
     </v-btn>
@@ -63,19 +64,40 @@
             state_tooltip_input: false,
         }),
 
+        watch: {
+            amount_cart() {
+                this.count = this.amount_cart;
+            }
+        },
+
+        created() {
+            this.count = this.amount_cart;
+        },
+
         methods: {
+            delete_cart() {
+                this.$store.commit('delete_card_shopping_cart', this.card.id);
+            },
+
             edit_count(action) {
+                let upd = true;
                 if(action === 'plus') {
                     if(this.count < this.card.stock) {
                         this.count++;
                     }else {
                         this.show_tooltip_input();
+                        upd = false;
                     }
                 }else {
                     if(this.count > 1) {
                         this.count--;
                     }
                 }
+
+                if(upd) {
+                    this.$store.commit('set_shopping_cart', {id: this.card.id, amount: this.count});
+                }
+
             },
 
             validate_max_count() {
@@ -97,6 +119,12 @@
                     this.state_tooltip_input = false;
                 }, 1000);
             },
+        },
+
+        computed: {
+            amount_cart() {
+                return this.card.amount ? this.card.amount : 1;
+            }
         }
     }
 </script>
