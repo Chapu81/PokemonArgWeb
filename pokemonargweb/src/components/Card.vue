@@ -70,6 +70,7 @@
                     <span>Máximo disponible</span>
                 </v-tooltip>
 
+                <span class="stock">/ {{card.stock}}</span>
 
                 <v-btn
                     depressed
@@ -102,21 +103,6 @@
     </v-card-text>
 
     <v-card-actions class="d-flex justify-center align-center">
-<!--         <v-btn
-            :color="btn_active ? 'success' : $store.getters.color_app"
-            depressed
-            elevation="2"
-            class="push-btn"
-            @click="push_shop"
-        >
-            <span v-if="!btn_active">
-                Agregar al carrito
-            </span>
-            <v-icon v-else>
-                mdi-check
-            </v-icon>
-        </v-btn> -->
-
         <v-tooltip top v-model="state_tooltip_button">
             <template v-slot:activator="{ attrs }">
                 <v-btn
@@ -135,7 +121,7 @@
                     </v-icon>
                 </v-btn>
             </template>
-            <span>Ya agregaste el máximo disponible</span>
+            <span>No puedes superar del máximo disponible</span>
         </v-tooltip>
     </v-card-actions>
 </v-card>
@@ -300,20 +286,30 @@ import Delete_item from './Delete_item.vue'
 
 .cantidad {
     text-align: center;
-    /* border: 1px solid red; */
-    /* height: 45px; */
-    width: 90px;
+    /* width: 90px; */
+    width: 110px;
     overflow: hidden;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-right: -5px;
+    position: relative;
 }
 
 .cantidad input {
     border: 1px solid #ddd;
-    width: 40px;
+    /* width: 40px; */
+    width: 60px;
     outline: 0;
     text-align: center;
+    /* position: relative; */
+    padding-right: 15px;
+}
+
+.cantidad .stock {
+    font-size: 12px;
+    position: absolute;
+    /* right: 45px; */
+    left: 53%;
 }
 </style>
