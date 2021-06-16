@@ -61,7 +61,7 @@
             </template>
         </ul>
 
-        <p class="total pa-5 pt-0 ma-0 d-flex justify-space-between align-center">
+        <p class="total pa-5 pt-0 d-flex justify-space-between align-center mxw-1000">
             <span>
                 Total:
             </span>
@@ -70,13 +70,15 @@
             </span>
         </p>
 
-        <v-btn
-            block
-            :color="color_app"
-            elevation="2"
-        >
-            Continuar
-        </v-btn>
+        <div class="mxw-1000 px-5">
+            <v-btn
+                :color="color_app"
+                elevation="2"
+                block
+            >
+                Continuar
+            </v-btn>
+        </div>
     </v-card>
 
 </v-dialog>
@@ -146,6 +148,11 @@ export default {
 .total {
     font-weight: bold;
     font-size: 20px;
+}
+
+.mxw-1000 {
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
 @media screen and (min-width: 650px) {
