@@ -30,71 +30,19 @@
 
 		<v-spacer></v-spacer>
 
-		<!-- <v-btn icon :x-small="mobile">
+		<v-btn icon :x-small="mobile" v-if="!search_active" @click="set_search_active">
 			<v-icon>mdi-magnify</v-icon>
-		</v-btn> -->
+		</v-btn>
 
-		<v-dialog
-			v-model="dialog"
-			max-width="600px"
-		>
-			<template v-slot:activator="{ on, attrs }">
-				<v-btn icon :x-small="mobile" v-bind="attrs" v-on="on">
-					<v-icon>mdi-magnify</v-icon>
-				</v-btn>
-			</template>
-			<v-card>
-				<v-card-text class="pa-4">
-					<v-text-field
-						label="Nombre de la carta"
-						dense
-						outlined
-					></v-text-field>
-
-					<v-select
-						:items="type_select"
-						label="Tipo"
-						dense
-						outlined
-					>
-						<template v-slot:selection="{ item }">
-							<v-img
-								:alt="item.text"
-								class="shrink mr-2"
-								contain
-								:src="`/img/types/${item.img}.webp`"
-								transition="scale-transition"
-								width="20"
-							/>
-							{{ item.text }}
-						</template>
-						<template v-slot:item="{ item }">
-							<v-img
-								:alt="item.text"
-								class="shrink mr-2"
-								contain
-								:src="`/img/types/${item.img}.webp`"
-								transition="scale-transition"
-								width="20"
-							/>
-							{{ item.text }}
-						</template>
-					</v-select>
-
-
-				</v-card-text>
-				<v-card-actions>
-					<v-spacer></v-spacer>
-					<v-btn
-						color="blue darken-1"
-						text
-						@click="dialog = false"
-					>
-						Buscar
-					</v-btn>
-				</v-card-actions>
-			</v-card>
-		</v-dialog>
+		<div class="input-search" v-else>
+			<v-text-field
+				label=""
+				placeholder="Nombre o tipo"
+				outlined
+				dense
+				@focusout="search_active = false;"
+			></v-text-field>
+		</div>
 
 		<template v-for="(section, key) in section_list">
 			<v-btn 
@@ -103,6 +51,7 @@
 				:small="mobile"
 				:to="section.link"
 				class="buttons-sections"
+				v-show="view_buttons"
 			>
 				{{section.text}}
 			</v-btn>
@@ -116,7 +65,7 @@
         name: 'navbar',
 		
 		data: () => ({
-			dialog: false,
+			search_active: false
         }),
 
         methods: {
@@ -125,11 +74,29 @@
 					this.$router.push(page)
 				}
 			},
+
+			set_search_active(){
+				this.search_active = true;
+				setTimeout(() => {
+					let input = document.querySelector('.input-search input');
+					if(input) {
+						input.focus();
+					}
+				}, 1);
+			}
         },
 
         computed: {
 			mobile() {
 				return this.$store.getters.mobile;
+			},
+
+			view_buttons() {
+				if(this.mobile && this.search_active) {
+					return false;
+				}
+
+				return true;
 			},
 
 			section_list() {
@@ -200,6 +167,12 @@
 </script>
 
 <style scoped>
+.input-search {
+	width: 180px;
+	height: 40px;
+	margin-right: 8px;
+}
+
 @media screen and (max-width: 600px){
 	.buttons-sections {
 		padding: 0 8px!important;
