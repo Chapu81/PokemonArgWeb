@@ -127,6 +127,7 @@ import Snackbar from '../../components/Snackbar.vue'
                 price: '',
                 stock: 1,
                 language: '',
+                date: null,
             }
         }),
 
@@ -176,6 +177,8 @@ import Snackbar from '../../components/Snackbar.vue'
                     return false;
                 }
 
+                const date = new Date();
+                this.data_product.date = Date.parse(date);
                 this.add_db();
             },
 
@@ -200,6 +203,7 @@ import Snackbar from '../../components/Snackbar.vue'
                     price: '',
                     stock: 1,
                     language: '',
+                    date: null,
                 }
 
                 if(this.is_cards) {

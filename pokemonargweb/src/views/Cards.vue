@@ -57,7 +57,15 @@ export default {
 	methods: {
 		async get_cards() {
 			try {
-				const snapshot = await db.collection('cards').get();
+				this.cards = await this.$store.dispatch('save_get_cards', 1623894714000);
+			}catch (error) {
+				console.log(error);
+			}
+		},
+		
+		/* async get_cards() {
+			try {
+				const snapshot = await db.collection('cards').orderBy('date').get();
 				this.cards = [];
 				snapshot.forEach(doc => {
 					let data = {
@@ -70,22 +78,7 @@ export default {
 			}catch (error) {
 				console.log(error);
 			}
-		},
-		
-		async add_card() {
-			try {
-				await db.collection('cards').add({
-					img: 'Ejemplo2',
-					name: 'Ejemplo 2',
-					price: '215212',
-					language: 'ingles',
-				});
-
-				this.get_cards();
-			}catch (error) {
-				console.log(error);
-			}
-		},
+		}, */
 		
 		async update_card(id) {
 			try {
