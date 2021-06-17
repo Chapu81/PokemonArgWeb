@@ -1,5 +1,23 @@
 <template>
 <div>
+	<v-btn
+		:color="$store.getters.color_app" 
+		text
+		@click="back"
+	>
+	Anterior
+	</v-btn>
+	
+	<v-btn
+		:color="$store.getters.color_app" 
+		text
+		@click="next"
+		:disabled="this.cards.length < this.total_card_list"
+	>
+	Siguiente
+	</v-btn>
+
+
 	<div class="d-md-flex justify-center justify-md-start align-center flex-wrap pa-4 container-cards hidden-load" >
 		<template v-for="card in cards">
 			<card-c 
@@ -14,7 +32,7 @@
 	<v-progress-circular
 		:size="70"
 		:width="7"
-		color="red"
+		:color="$store.getters.color_app" 
 		indeterminate
 		class="spinner"
 		v-if="!loaded"
@@ -40,6 +58,9 @@ export default {
 		snackbar_text: '',
 		card_loaded: 0,
 		loaded: false,
+		last_card: null,
+		card_page: 1,
+		cards_save:[]
 	}),
 
 	watch: {
@@ -47,20 +68,59 @@ export default {
 			if(this.card_loaded > 0 && !this.loaded) {
 				this.loaded = true
 			}
+		},
+
+		cards() {
+			let length = this.cards.length;
+			if(length === this.total_card_list) {
+				if(this.cards[length - 1].date !== this.last_card)  {
+					this.last_card = this.cards[length - 1].date;
+				}
+			}else {
+				this.last_card = null;
+			}
 		}
 	},
 
 	created() {
-		this.get_cards();
+		if(this.cards_pages.length) {
+			this.cards = [...this.cards_pages[0]];
+			this.cards_save = [...this.cards_pages];
+		}else {
+			this.get_cards();
+		}
 	},
 
 	methods: {
 		async get_cards() {
+			console.log('call_api');
 			try {
-				this.cards = await this.$store.dispatch('save_get_cards', 1623894714000);
+				this.cards = await this.$store.dispatch('save_get_cards', this.last_card);
+				this.cards_save.push(this.cards);
 			}catch (error) {
 				console.log(error);
 			}
+		},
+
+		next() {
+			if(this.cards.length === this.total_card_list) {
+			this.card_page++;
+			
+			this.card_page <= this.cards_save.length 
+					? this.set_cards(this.card_page - 1)
+					: this.get_cards();
+			}
+		},
+
+		back() {
+			if(this.card_page > 1) {
+				this.card_page--;
+				this.set_cards(this.card_page - 1);
+			}
+		},
+
+		set_cards(id) {
+			this.cards = [...this.cards_save[id]];
 		},
 		
 		/* async get_cards() {
@@ -102,6 +162,16 @@ export default {
 				this.snackbar_text = 'Ocurrió un error al eliminar la carta';
 			}
 		}
+	},
+
+	computed: {
+		total_card_list() {
+			return 1;
+		},
+
+		cards_pages() {
+            return this.$store.getters.cards_pages;
+        },
 	}
 }
 </script>

@@ -13,7 +13,6 @@ state: {
     count_shopping_cart: 0,
     color_app: "error",
 	cards_pages: [],
-	cards_active: [],
 },
 mutations: {
     log_state(state, user) {
@@ -30,10 +29,6 @@ mutations: {
     
 	set_cards_pages(state, arr) {
 		state.cards_pages.push(arr);
-    },
-	
-	set_cards_active(state, arr) {
-		state.cards_active = arr;
     },
 
     set_count_shopping_cart(state, { action, amount, card }) {
@@ -87,7 +82,7 @@ actions: {
 				cards.push(data);
 			});
 			
-			commit('set_cards_active', cards);
+			commit('set_cards_pages', cards);
 			return cards;
 
 		}catch (error) {
@@ -127,8 +122,8 @@ getters: {
 		return state.color_app;
     },
     
-	cards_active: (state) => {
-		return state.cards_active;
+	cards_pages: (state) => {
+		return state.cards_pages;
     },
 },
 });
