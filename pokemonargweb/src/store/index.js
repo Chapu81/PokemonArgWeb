@@ -89,6 +89,27 @@ actions: {
 			console.log(error);
 		}
 	},
+	
+	async get_cards_params({ commit }, param, last) {
+		try {
+			const call_db = db.collection('cards').where('filters', 'array-contains-any', [param.toLowerCase()]).limit(1);
+			const snapshot = !last 
+							? await call_db.get() 
+							: await call_db.startAfter(last).get();
+			var cards = [];
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id,
+					...doc.data()
+				};
+				cards.push(data);
+			});
+			return cards;
+
+		}catch (error) {
+			console.log(error);
+		}
+	},
 },
 
 modules: {},

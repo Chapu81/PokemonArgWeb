@@ -38,8 +38,11 @@
 			<v-text-field
 				label=""
 				placeholder="Nombre o tipo"
+				clearable
 				outlined
 				dense
+				v-model="data_search"
+				@keyup.enter="search"
 				@focusout="search_active = false;"
 			></v-text-field>
 		</div>
@@ -65,7 +68,8 @@
         name: 'navbar',
 		
 		data: () => ({
-			search_active: false
+			search_active: false,
+			data_search: '',
         }),
 
         methods: {
@@ -81,6 +85,20 @@
 					let input = document.querySelector('.input-search input');
 					if(input) {
 						input.focus();
+					}
+				}, 1);
+			},
+
+			search() {
+				let page = `/busqueda/${this.data_search.toLowerCase()}`;
+				if(this.$route.fullPath != page) {
+					this.$router.push(page)
+				}
+
+				setTimeout(() => {
+					let input = document.querySelector('.input-search input');
+					if(input) {
+						input.blur();
 					}
 				}, 1);
 			}

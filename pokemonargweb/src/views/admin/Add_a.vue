@@ -185,7 +185,14 @@ import Snackbar from '../../components/Snackbar.vue'
             
             async add_db() {
                 try {
-                    await db.collection(this.database).add(this.data_product);
+                    let data = {...this.data_product};
+                    data.filters = data.name.toLowerCase().split(' ');
+                    data.filters.push(data.language.toLowerCase());
+                    if(data.type) {
+                        data.filters.push(data.type.toLowerCase());
+                    }
+
+                    await db.collection(this.database).add(data);
                     this.snackbar_text = 'Datos cargados correctamente';
                     this.reset_data();
                     this.loading = false;
