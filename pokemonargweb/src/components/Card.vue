@@ -86,10 +86,11 @@
         </div>
 
         <div class="d-flex justify-space-between align-center mt-1">
-            <span class="d-flex justify-center align-center">
+            <span class="d-flex justify-center align-center tipo">
                 Tipo: 
                 <v-img
-                    :alt="card.type"
+                    :alt="card.type" 
+                    :title="card.type"
                     class="shrink ml-2"
                     contain
                     :src="`/img/types/${types[card.type]}.webp`"
@@ -98,7 +99,9 @@
                 />
             </span>
 
-            <delete-item @delete_card="delete_card" />
+            <template v-if="logued">
+                <delete-item @delete_card="delete_card" />
+            </template>
         </div>
     </v-card-text>
 
@@ -311,5 +314,9 @@ import Delete_item from './Delete_item.vue'
     position: absolute;
     /* right: 45px; */
     left: 53%;
+}
+
+.tipo {
+    height: 36px;
 }
 </style>

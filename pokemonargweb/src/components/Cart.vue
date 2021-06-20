@@ -53,7 +53,7 @@
                 <v-icon>mdi-close</v-icon>
             </v-btn>
         </v-toolbar>
-        <p class="ma-5 text-center text-cart">Por el momento todas las compras que realices por la página seran únicamente una reserva de la misma. Una vez finalizada la reserva nos podremos en contacto contigo para coordinar la entrega y el medio de pago.</p>
+        <p class="my-5 mx-auto text-center text-cart">Por el momento todas las compras que realices por la página seran únicamente una reserva de la misma. Una vez finalizada la reserva nos podremos en contacto contigo para coordinar la entrega y el medio de pago.</p>
         <v-divider></v-divider>
         <ul class="pa-5 pt-0">
             <template v-for="(card, key) in shopping_cart">
@@ -142,7 +142,7 @@ export default {
 
 <style scoped>
 .text-cart {
-    font-size: 13px;
+    font-size: 14px;
 }
 
 .total {
@@ -163,6 +163,28 @@ export default {
         flex-wrap: wrap;
         max-width: 1000px;
         margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 768px) {
+    .text-cart {
+        font-size: 16px;
+        max-width: 778px;
+        margin: 0 auto;
+    }
+}
+
+@media screen and (min-width: 992px) {
+    .text-cart {
+        font-size: 18px;
+        max-width: 875px;
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .text-cart {
+        font-size: 19px;
+        max-width: 925px;
     }
 }
 </style>
