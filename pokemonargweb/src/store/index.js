@@ -111,6 +111,55 @@ actions: {
 			console.log(error);
 		}
 	},
+
+	async push_order({ dispatch }, data) {
+		try {
+			await db.collection('orders').add(data);
+
+			data.shopping_cart.forEach(order => {
+				let data = {
+					data_db: order.description ? 'decks' : 'cards',
+					id: order.id,
+				}
+				if(order.amount === order.stock || order.stock === 1) {
+					dispatch('delete', data);
+				}else {
+					data.new_stock = order.stock - order.amount;
+					dispatch('update', data);
+				}
+			});
+
+			return true;
+
+		}catch (error) {
+			console.log(error);
+			return false;
+		}
+	},
+
+	async delete({ dispatch }, { data_db, id}) {
+		try {
+			await db.collection(data_db).doc(id).delete();
+			return true
+
+		}catch (error) {
+			console.log(error);
+			return false;
+		}
+	},
+	
+	async update({ dispatch }, { data_db, id, new_stock}) {
+		try {
+			await db.collection(data_db).doc(id).update({
+				stock: new_stock
+			});
+			return true
+
+		}catch (error) {
+			console.log(error);
+			return false;
+		}
+	},
 },
 
 modules: {},

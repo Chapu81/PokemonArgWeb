@@ -135,7 +135,7 @@ import db from '../main'
 import Delete_item from './Delete_item.vue'
     export default {
         name: 'Card',
-        props: ['card'],
+        props: ['card', 'is_deck'],
 
         components: {
             'delete-item': Delete_item,
@@ -166,14 +166,12 @@ import Delete_item from './Delete_item.vue'
             },
 
             async delete_card() {
-                try {
-                    await db.collection('cards').doc(this.card.id).delete();
-                    this.$emit('card_delete', true);
-
-                }catch (error) {
-                    this.$emit('card_delete', false);
-                    console.log(error);
-                }
+                let data = {
+                    id: this.card.id,
+                    data_db: this.is_deck ? 'decks' : 'cards',
+                };
+                let res = await this.$store.dispatch('delete', data);
+                this.$emit('card_delete', res);
             },
 
             push_shop() {
