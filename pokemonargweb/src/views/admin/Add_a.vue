@@ -249,15 +249,15 @@ import Snackbar from '../../components/Snackbar.vue'
 
             language_select() {
                 return [
-                    'Alemán',
-                    'Coreano',
-                    'Español',
-                    'Francés',
-                    'Holandés',
                     'Inglés',
-                    'Italiano',
+                    'Español',
+                    'Coreano',
                     'Japonés',
                     'Portugués',
+                    'Alemán',
+                    'Francés',
+                    'Holandés',
+                    'Italiano',
                 ];
             },
             

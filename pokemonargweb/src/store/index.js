@@ -69,7 +69,7 @@ mutations: {
 actions: {
 	async save_get_cards({ commit }, last) {
 		try {
-			const call_db = db.collection('cards').orderBy('date').limit(1);
+			const call_db = db.collection('cards').orderBy('date', 'desc').limit(3);
 			const snapshot = !last 
 							? await call_db.get() 
 							: await call_db.startAfter(last).get();
@@ -90,9 +90,9 @@ actions: {
 		}
 	},
 	
-	async get_cards_params({ commit }, param, last) {
+	async get_cards_params({ commit }, params, last) {
 		try {
-			const call_db = db.collection('cards').where('filters', 'array-contains-any', [param.toLowerCase()]).limit(1);
+			const call_db = db.collection('cards').where('filters', 'array-contains-any', params).limit(3);
 			const snapshot = !last 
 							? await call_db.get() 
 							: await call_db.startAfter(last).get();
@@ -104,6 +104,7 @@ actions: {
 				};
 				cards.push(data);
 			});
+
 			return cards;
 
 		}catch (error) {
