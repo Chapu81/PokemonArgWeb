@@ -190,12 +190,6 @@ li {
 	margin: 0 auto;
 }
 
-.spinner {
-	position: absolute;
-	top: calc(50vh - 80px);
-	left: calc(50vw - 35px);
-}
-
 .no-data {
 	display: flex;
 	justify-content: center;

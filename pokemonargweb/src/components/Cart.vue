@@ -286,11 +286,11 @@ export default {
 
         async confirm() {
             this.load_confirm = true;
-            const date = new Date();
+            // const date = new Date();
             const data_order = {
                 data_person: this.data_person,
-                shopping_cart: this.shopping_cart,
-                date: Date.parse(date)
+                shopping_cart: this.set_data_shopping_order,
+                // date: Date.parse(date)
             }
 
             let res = await this.$store.dispatch('push_order', data_order);
@@ -307,9 +307,8 @@ export default {
                 this.load_confirm = false;
             }
 
-
             this.snackbar = true;
-        }
+        },
     },
 
     computed: {
@@ -340,6 +339,20 @@ export default {
             }
 
             return false;
+        },
+
+        set_data_shopping_order() {
+            let res = [];
+            this.shopping_cart.forEach(card => {
+                let new_data = {...card};
+                new_data.img = new_data.imgs[0];
+                delete new_data.filters;
+                delete new_data.date;
+                delete new_data.imgs;
+                res.push(new_data);
+            });
+
+            return res;
         }
     }
 }

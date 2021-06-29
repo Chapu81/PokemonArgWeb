@@ -9,7 +9,6 @@ import Cards from './Cards.vue'
         components: {
             'cards-view': Cards,
         },
-
     }
 </script>
 

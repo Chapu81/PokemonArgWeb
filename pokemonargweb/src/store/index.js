@@ -13,6 +13,7 @@ state: {
     count_shopping_cart: 0,
     color_app: "error",
 	cards_pages: [],
+	orders: [],
 },
 mutations: {
     log_state(state, user) {
@@ -63,6 +64,10 @@ mutations: {
     empty_count_shopping_cart(state) {
 		state.count_shopping_cart = 0;
 		state.shopping_cart = [];
+    },
+
+	set_orders(state, orders) {
+		state.orders = orders;
     },
 },
 
@@ -160,6 +165,26 @@ actions: {
 			return false;
 		}
 	},
+
+	async save_get_orders({ commit }) {
+		try {
+			const snapshot = await db.collection('orders').get();
+			var orders = [];
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id,
+					...doc.data()
+				};
+				orders.push(data);
+			});
+			
+			commit('set_orders', orders);
+			return orders;
+
+		}catch (error) {
+			console.log(error);
+		}
+	},
 },
 
 modules: {},
@@ -195,6 +220,10 @@ getters: {
     
 	cards_pages: (state) => {
 		return state.cards_pages;
+    },
+	
+	orders: (state) => {
+		return state.orders;
     },
 },
 });
