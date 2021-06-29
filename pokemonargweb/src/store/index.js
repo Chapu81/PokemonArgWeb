@@ -125,11 +125,11 @@ actions: {
 				let data = {
 					data_db: order.description ? 'decks' : 'cards',
 					id: order.id,
+					new_stock: order.amount - order.amount - order.amount,
 				}
 				if(order.amount === order.stock || order.stock === 1) {
 					dispatch('delete', data);
 				}else {
-					data.new_stock = order.stock - order.amount;
 					dispatch('update', data);
 				}
 			});
@@ -155,10 +155,44 @@ actions: {
 	
 	async update({ dispatch }, { data_db, id, new_stock}) {
 		try {
+			let element = await db.collection(data_db).doc(id).get();
+			let stock = element.data().stock;
 			await db.collection(data_db).doc(id).update({
-				stock: new_stock
+				stock: stock + new_stock
 			});
 			return true
+
+		}catch (error) {
+			console.log(error);
+			return false;
+		}
+	},
+	
+	async confirm_order({ dispatch }, id) {
+		try {
+			await db.collection('orders').doc(id).delete();
+			return true;
+
+		}catch (error) {
+			console.log(error);
+			return false;
+		}
+	},
+	
+	async reject_order({ dispatch }, {id, data_card}) {
+		try {
+			await db.collection('orders').doc(id).delete();
+
+			data_card.forEach(card => {
+				let data = {
+					data_db: card.description ? 'decks' : 'cards',
+					id: card.id,
+					new_stock: card.amount,
+				}
+				dispatch('update', data);
+			});
+
+			return true;
 
 		}catch (error) {
 			console.log(error);
@@ -183,6 +217,7 @@ actions: {
 
 		}catch (error) {
 			console.log(error);
+			return []
 		}
 	},
 },

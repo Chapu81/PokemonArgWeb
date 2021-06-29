@@ -207,6 +207,7 @@
 
     <v-snackbar
         v-model="snackbar"
+        :timeout="2000"
     >
         {{ text_snackbar }}
 
@@ -301,7 +302,7 @@ export default {
                     this.empty_cart();
                     this.text_snackbar = '';
                     window.location.reload();
-                }, 3000)
+                }, 2500)
             }else{
                 this.text_snackbar = 'Ocurrió un error al confirmar el pedido';
                 this.load_confirm = false;
@@ -345,10 +346,6 @@ export default {
             let res = [];
             this.shopping_cart.forEach(card => {
                 let new_data = {...card};
-                new_data.img = new_data.imgs[0];
-                delete new_data.filters;
-                delete new_data.date;
-                delete new_data.imgs;
                 res.push(new_data);
             });
 

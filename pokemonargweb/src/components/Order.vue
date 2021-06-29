@@ -16,10 +16,10 @@
             </div>
             <template v-for="(card, key) in shopping_cart">
                 <div :key="key" class="data-card d-flex justify-space-between align-center my-4">
-                    <img :src="card.img" :alt="card.name">
+                    <img :src="card.imgs[0]" :alt="card.name">
                     <div>
                         <p>{{card.name}}</p>
-                        <p>{{card.amount}}</p>
+                        <p>Cant: {{card.amount}}</p>
                         <p>{{card.language}}</p>
                     </div>
                     <p>{{card.amount}} x ${{card.price}}</p>
@@ -35,11 +35,11 @@
                 <span>${{total}}</span>
             </p>
             <div class="icons-options d-flex justify-space-between align-center mt-3">
-                <v-btn dense text small color="green" @click="confirmar">
+                <v-btn dense text small color="green" @click="confirm">
                     <v-icon dense>mdi-check</v-icon>
                     Confirmar
                 </v-btn>
-                <v-btn dense text small color="red" @click="rechazar">
+                <v-btn dense text small color="red" @click="reject">
                     <v-icon dense>mdi-delete</v-icon>
                     Rechazar
                 </v-btn>
@@ -55,13 +55,25 @@ export default {
     props: ['order'],
 
     methods: {
-        confirmar() {
+        async confirm() {
             console.log('confirmar');
         },
 
-        rechazar() {
-            console.log('rechazar');
+        async reject() {
+            let data = {
+                id: this.order.id,
+                data_card: this.order.shopping_cart,
+            }
+            let res = await this.$store.dispatch('reject_order', data);
+
+            if(res) {
+                this.update_orders('reject');
+            }
         },
+
+        update_orders(action) {
+            this.$emit('update_orders', action);
+        }
 
     },
 
