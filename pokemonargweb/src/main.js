@@ -34,6 +34,9 @@ firebase.auth().onAuthStateChanged(function(user) {
 
 export default firebase.firestore();
 
+Vue.component('loader-c', () => import('./components/Loader'));
+Vue.component('snackbar-c', () => import('./components/Snackbar'));
+
 Vue.config.productionTip = false
 
 new Vue({

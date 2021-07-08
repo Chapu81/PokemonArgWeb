@@ -37,28 +37,18 @@
 		</v-btn>
 	</div>
 
-
-	<v-progress-circular
-		:size="70"
-		:width="7"
-		:color="$store.getters.color_app" 
-		indeterminate
-		class="spinner"
-		v-if="!loaded"
-    ></v-progress-circular>
+	<loader-c v-if="!loaded" />
 </div>
 </template>
 
 <script>
 import Card from '../components/Card'
-import Snackbar from '../components/Snackbar'
 
 export default {
 	name: 'cards',
 	
 	components: {
 		'card-c': Card,
-		'snackbar-c': Snackbar,
     },
 
 	data: () => ({

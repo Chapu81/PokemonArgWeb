@@ -13,14 +13,7 @@
         </div>
     </template>
 
-    <v-progress-circular
-		:size="70"
-		:width="7"
-		:color="$store.getters.color_app" 
-		indeterminate
-		class="spinner"
-		v-if="!loaded"
-    ></v-progress-circular>
+    <loader-c v-if="!loaded" />
 
     <v-snackbar
         v-model="snackbar"

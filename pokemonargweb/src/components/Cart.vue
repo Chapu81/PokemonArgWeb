@@ -204,24 +204,7 @@
 
     </v-card>
     
-
-    <v-snackbar
-        v-model="snackbar"
-        :timeout="2000"
-    >
-        {{ text_snackbar }}
-
-        <template v-slot:action="{ attrs }">
-            <v-btn
-                color="pink"
-                text
-                v-bind="attrs"
-                @click="snackbar = false"
-            >
-                Cerrar
-            </v-btn>
-        </template>
-    </v-snackbar>
+    <snackbar-c :text="text_snackbar" />
 
 </v-dialog>
 </template>
@@ -299,10 +282,10 @@ export default {
             if(res) {
                 this.text_snackbar = 'El pedido se realizó correctamente';
                 setTimeout(() => {
-                    this.empty_cart();
-                    this.text_snackbar = '';
+                    // this.empty_cart();
+                    // this.text_snackbar = '';
                     window.location.reload();
-                }, 2500)
+                }, 1000)
             }else{
                 this.text_snackbar = 'Ocurrió un error al confirmar el pedido';
                 this.load_confirm = false;

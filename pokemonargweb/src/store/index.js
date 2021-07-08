@@ -14,6 +14,7 @@ state: {
     color_app: "error",
 	cards_pages: [],
 	orders: [],
+	discounts: [],
 },
 mutations: {
     log_state(state, user) {
@@ -68,6 +69,10 @@ mutations: {
 
 	set_orders(state, orders) {
 		state.orders = orders;
+    },
+	
+	set_discounts(state, discounts) {
+		state.discounts = discounts;
     },
 },
 
@@ -141,6 +146,7 @@ actions: {
 			return false;
 		}
 	},
+	
 
 	async delete({ dispatch }, { data_db, id}) {
 		try {
@@ -220,6 +226,40 @@ actions: {
 			return []
 		}
 	},
+	
+	async save_get_discounts({ commit }) {
+		try {
+			const snapshot = await db.collection('discounts').get();
+			var discounts = [];
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id,
+					...doc.data()
+				};
+				discounts.push(data);
+			});
+			
+			commit('set_discounts', discounts);
+			return discounts;
+
+		}catch (error) {
+			console.log(error);
+			return []
+		}
+	},
+
+	async push_discounts({ dispatch }, data) {
+		try {
+			await db.collection('discounts').add(data);
+			dispatch('save_get_discounts');
+
+			return true;
+
+		}catch (error) {
+			console.log(error);
+			return false;
+		}
+	},
 },
 
 modules: {},
@@ -259,6 +299,10 @@ getters: {
 	
 	orders: (state) => {
 		return state.orders;
+    },
+	
+	discounts: (state) => {
+		return state.discounts;
     },
 },
 });

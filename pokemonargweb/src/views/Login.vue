@@ -39,20 +39,13 @@
 </template>
 
 <script>
-import Snackbar from '../components/Snackbar'
 	export default {
 		name: 'login',
-
-		components: {
-			'snackbar-c': Snackbar
-		},
 
 		data: () => ({
 			loading: false,
 			email: '',
 			password: '',
-			// email: 'pokemonarg.web@gmail.com',
-			// password: 'Pokemonarg1981',
 
 			show_password: false,
             snackbar_text: '',

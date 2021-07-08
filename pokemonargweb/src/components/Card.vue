@@ -142,7 +142,6 @@ import Delete_item from './Delete_item.vue'
         },
 
         data: () => ({
-            snackbar_text: '',
             view_carousel: false,
             img_loaded: 0,
             btn_active: false,

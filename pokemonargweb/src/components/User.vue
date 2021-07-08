@@ -77,6 +77,10 @@ export default {
                     text: 'Pedidos',
                     link: '/pedidos-admin',
                 },
+                {
+                    text: 'Usuarios con descuento',
+                    link: '/usuarios-descuentos',
+                },
             ]
         }
     }

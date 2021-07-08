@@ -29,9 +29,10 @@
 
         watch: {
             text() {
-                if(this.text !== '') {
+                /* if(this.text !== '') {
                     this.state_snackbar = true;
-                }
+                } */
+                this.state_snackbar = this.text !== '';
             },
             
             state_snackbar() {
