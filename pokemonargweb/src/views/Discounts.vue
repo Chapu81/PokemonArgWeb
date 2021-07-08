@@ -8,12 +8,13 @@
 		>
 			<template v-slot:activator="{ on, attrs }">
 				<v-btn
-					text
+					icon
 					plain
 					v-bind="attrs"
 					v-on="on"
 				>
-					Agregar nuevo
+					<!-- Agregar nuevo -->
+					<v-icon>mdi-account-plus</v-icon>
 				</v-btn>
 			</template>
 
@@ -24,6 +25,7 @@
 						label="Usuario (sin arroba @)"
 						dense
 						outlined
+						@keypress.enter="validate"
 					></v-text-field>
 				</div>
 
@@ -32,7 +34,7 @@
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn
-						color="primary"
+						:loading="loading_modal"
 						text
 						@click="validate"
 					>
@@ -49,9 +51,6 @@
 				<thead>
 					<tr>
 						<th class="text-left">
-							ID
-						</th>
-						<th class="text-left">
 							Nombre
 						</th>
 						<th class="delete">
@@ -64,11 +63,19 @@
 						v-for="(item, key) in discounts"
 						:key="`${item.id}-${key}`"
 					>
-						<td>{{ item.id }}</td>
 						<td>{{ item.user }}</td>
-						<td class="delete">
+						<td class="delete text-right">
 							<span>
-								<v-icon @click="delete_discounts(item.id)">mdi-delete</v-icon>
+								<!-- <v-icon @click="delete_discounts(item.id)">mdi-delete</v-icon> -->
+								<v-btn
+									icon
+									plain
+									:loading="btn_loading === item.id"
+									@click="loading_and_delete(item.id)"
+									:class="`delete-${item.id}`"
+								>
+									<v-icon>mdi-delete</v-icon>
+								</v-btn>
 							</span>
 						</td>
 					</tr>
@@ -77,6 +84,8 @@
 		</v-simple-table>
 
 		<snackbar-c :text="text_snackbar" />
+
+		<loader-c v-if="!loaded" />
 	</div>
 </div>
 </template>
@@ -88,6 +97,9 @@ export default {
 		dialog: false,
 		new_user: '',
 		text_snackbar: '',
+		loaded: false,
+		btn_loading: null,
+		loading_modal: false,
 	}),
 
 	created() {
@@ -98,6 +110,7 @@ export default {
 		async get_discounts() {
 			try {
                 await this.$store.dispatch('save_get_discounts');
+				this.loaded = true;
 			}catch (error) {
 				console.log(error);
 			}
@@ -107,12 +120,13 @@ export default {
 			try {
                 await this.$store.dispatch('push_discounts', {user: this.new_user});
 				this.set_snackbar('Usuario cargado correctamente');
+				this.dialog = false;
 			}catch (error) {
 				console.log(error);
 				this.set_snackbar('Error al cargar el usuario');
 			}
 
-			this.dialog = false;
+			this.loading_modal = false;
 		},
 		
 		async delete_discounts(id) {
@@ -120,17 +134,25 @@ export default {
                 await this.$store.dispatch('delete', {data_db: 'discounts', id});
 				this.set_snackbar('Usuario borrado correctamente');
 				this.get_discounts();
+				this.new_user = '';
 			}catch (error) {
 				console.log(error);
 				this.set_snackbar('Error al borrar el usuario');
 			}
+
+			this.btn_loading = null;
+		},
+
+		loading_and_delete(id) {
+			this.btn_loading = id;
+			this.delete_discounts(id);
 		},
 
 		validate() {
 			if(this.new_user !== '') {
-				let repeat = this.discounts.indexOf(this.new_user);
-				console.log(repeat);
-				if(repeat === -1) {
+				let repeat = this.discounts.filter(discount => discount.user === this.new_user);
+				if(repeat.length === 0) {
+					this.loading_modal = true;
 					this.new_discounts();
 				}else {
 					this.set_snackbar('El usuario ya se encuentra registrado');
@@ -156,7 +178,7 @@ export default {
 
 <style scoped>
 .table-container {
-	max-width: 500px;
+	max-width: 400px;
 	margin: 0 auto;
 }
 
