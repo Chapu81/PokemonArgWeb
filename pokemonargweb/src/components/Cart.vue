@@ -81,7 +81,7 @@
                     Total:
                 </span>
                 <span>
-                    ${{total}}
+                    ${{total | currency_format}}
                 </span>
             </p>
 
@@ -155,21 +155,8 @@
             </div>
         </div>
 
-        <div v-if="view === 3" class="views">
+        <div v-if="view === 3" class="views last-view">
             <div class="flex pa-5">
-                <div>
-                    <p class="mb-1">Cartas</p>
-                    <ul class="pl-0">
-                        <template v-for="(card, key) in shopping_cart">
-                            <li :key="key">
-                                {{card.name}} x {{card.amount}} = ${{card.price * card.amount}}
-                            </li>
-                        </template>
-                    </ul>
-                </div>
-
-                <v-divider class="my-4 divider-mobile"></v-divider>
-
                 <div>
                     <p class="mb-1">Datos personales</p>
                     <ul class="pl-0">
@@ -187,6 +174,62 @@
                         </li>
                     </ul>
                 </div>
+
+                <v-divider class="my-4 divider-mobile"></v-divider>
+
+                <div>
+                    <p class="mb-1">Cartas</p>
+                    <ul class="pl-0 totals">
+                        <template v-for="(card, key) in shopping_cart">
+                            <li :key="key">
+                                <span>
+                                    {{card.name}} x {{card.amount}}:
+                                </span>
+                                <span>
+                                    ${{card.price * card.amount | currency_format}}
+                                </span>
+                                <!-- {{card.name}} x {{card.amount}} = ${{card.price * card.amount | currency_format}} -->
+                            </li>
+                        </template>
+
+                        
+                        <li class="bolder" v-if="is_discounts">
+                            <span>Subtotal:</span>
+                            <span>${{ total | currency_format }}</span>
+                            <!-- Subtotal: ${{ total | currency_format }} -->
+                        </li>
+                        <li class="bolder" v-if="is_discounts">
+                            <span>Descuento (10%):</span>
+                            <span>${{ discount | currency_format }}</span>
+                            <!-- Descuento: ${{ discount | currency_format }} (10%) -->
+                        </li>
+                        <li class="bolder">
+                            <span>Total:</span>
+                            <span>${{ final_total | currency_format }}</span>
+                            <!-- Total: ${{ final_total | currency_format }} -->
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- <v-divider class="my-4 divider-mobile"></v-divider> -->
+
+                <!-- <div>
+                    <p class="mb-1">Datos personales</p>
+                    <ul class="pl-0">
+                        <li>
+                            {{data_person.first_name}} {{data_person.last_name}}
+                        </li>
+                        <li>
+                            {{data_person.tel}}
+                        </li>
+                        <li>
+                            {{data_person.social}}
+                        </li>
+                        <li>
+                            {{data_person.user}}
+                        </li>
+                    </ul>
+                </div> -->
             </div>
             
             <div class="px-5">
@@ -205,6 +248,8 @@
     </v-card>
     
     <snackbar-c :text="text_snackbar" />
+
+    <loader-c v-if="!loaded" />
 
 </v-dialog>
 </template>
@@ -229,6 +274,13 @@ export default {
             if(!this.dialog) {
                 this.view = 1;
             }
+        },
+
+        view() {
+            if(this.view === 3) {
+                this.loaded = false;
+                this.get_discounts();
+            }
         }
     },
 
@@ -242,6 +294,8 @@ export default {
         snackbar: false,
 
         load_confirm: false,
+
+        loaded: true,
 
         data_person: {
             first_name: '',
@@ -272,7 +326,10 @@ export default {
             this.load_confirm = true;
             // const date = new Date();
             const data_order = {
-                data_person: this.data_person,
+                data_person: {
+                    ...this.data_person,
+                    discount: this.is_discounts,
+                },
                 shopping_cart: this.set_data_shopping_order,
                 // date: Date.parse(date)
             }
@@ -293,6 +350,15 @@ export default {
 
             this.snackbar = true;
         },
+
+        async get_discounts() {
+			try {
+                await this.$store.dispatch('save_get_discounts');
+                this.loaded = true;
+			}catch (error) {
+				console.log(error);
+			}
+		},
     },
 
     computed: {
@@ -333,6 +399,37 @@ export default {
             });
 
             return res;
+        },
+
+        discounts() {
+            return this.$store.getters.discounts;
+        },
+
+        is_discounts() {
+            if(this.data_person.social === 'instagram' && this.data_person.user !== '') {
+                let repeat = this.discounts.filter(discount => discount.user.toLowerCase() === this.data_person.user.toLowerCase());
+                if(repeat.length !== 0) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+        discount() {
+            if(this.is_discounts) {
+                return this.total / 10;
+            }
+
+            return 0;
+        },
+
+        final_total() {
+            if(this.is_discounts) {
+                return this.total - this.discount;
+            }
+
+            return this.total;
         }
     }
 }
@@ -371,6 +468,12 @@ li {
     font-size: 18px;
 }
 
+ul.totals li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 @media screen and (min-width: 650px) {
     .flex {
         display: flex;
@@ -388,6 +491,10 @@ li {
 
     .divider-mobile {
         display: none;
+    }
+
+    .last-view > div div{
+        width: 45%;
     }
 }
 

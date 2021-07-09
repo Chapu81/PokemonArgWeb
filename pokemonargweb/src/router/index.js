@@ -46,7 +46,7 @@ const routes = [
   {
     path: '/usuarios-descuentos',
     name: 'Discounts',
-    component: () => import(/* webpackChunkName: "discounts" */ '../views/Discounts.vue')
+    component: () => import(/* webpackChunkName: "discounts" */ '../views/admin/Discounts_a.vue')
   },
 ]
 
