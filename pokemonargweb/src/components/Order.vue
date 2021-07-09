@@ -22,26 +22,41 @@
                         <p>Cant: {{card.amount}}</p>
                         <p>{{card.language}}</p>
                     </div>
-                    <p>{{card.amount}} x ${{card.price}}</p>
+                    <p>{{card.amount}} x ${{card.price | currency_format}}</p>
                 </div>
             </template>
 
-            <p class="d-flex justify-space-between align-center ma-0 bolder subtotal">
-                <span>Subtotal:</span>
-                <span>${{subtotal}}</span>
-            </p>
-            <p class="d-flex justify-space-between align-center ma-0 bolder total">
-                <span>Total:</span>
-                <span>${{total}}</span>
-            </p>
+            <template v-for="(item, key) in totals">
+                <p class=" d-flex 
+                        justify-space-between 
+                        align-center 
+                        ma-0 bolder" 
+                    :class="item.data_class"
+                    v-if="item.view"
+                    :key="key + item.text">
+                    <span>{{ item.text }}:</span>
+                    <span>${{item.value | currency_format}}</span>
+                </p>
+            </template>
+
             <div class="icons-options d-flex justify-space-between align-center mt-3">
-                <v-btn dense text small color="green" @click="confirm">
-                    <v-icon dense>mdi-check</v-icon>
-                    Confirmar
+                <v-btn dense 
+                    text small 
+                    color="green" 
+                    @click="confirm" 
+                    :disabled="loading_reject"
+                    :loading="loading_confirm">
+                        <v-icon dense>mdi-check</v-icon>
+                        Confirmar
                 </v-btn>
-                <v-btn dense text small color="red" @click="reject">
-                    <v-icon dense>mdi-delete</v-icon>
-                    Rechazar
+                <v-btn dense 
+                    text small 
+                    color="red" 
+                    @click="reject" 
+                    :disabled="loading_confirm"
+                    :loading="loading_reject">
+                        <v-icon dense>mdi-delete</v-icon>
+                        Rechazar
                 </v-btn>
             </div>
         </v-expansion-panel-content>
@@ -54,12 +69,19 @@ export default {
     name: 'order',
     props: ['order'],
 
+    data: () => ({
+        loading_confirm: false,
+        loading_reject: false,
+    }),
+
     methods: {
         async confirm() {
+            this.loading_confirm = true;
             console.log('confirmar');
         },
 
         async reject() {
+            this.loading_reject = true;
             let data = {
                 id: this.order.id,
                 data_card: this.order.shopping_cart,
@@ -110,14 +132,39 @@ export default {
             return res;
         },
         
+        discount() {
+            if(this.data_person.discount) {
+                return this.subtotal / 10;
+            }
+            
+            return 0;
+        },
+        
         total() {
-            let res = 0;
-            this.shopping_cart.forEach(card => {
-                let total_card = card.price * card.amount;
-                res += total_card;
-            });
+            return this.subtotal - this.discount;
+        },
 
-            return res;
+        totals() {
+            return [
+                {
+                    data_class: 'subtotal',
+                    text: 'Subtotal',
+                    value: this.subtotal,
+                    view: this.data_person.discount,
+                },
+                {
+                    data_class: '',
+                    text: 'Descuento',
+                    value: this.discount,
+                    view: this.data_person.discount,
+                },
+                {
+                    data_class: 'total',
+                    text: 'Total',
+                    value: this.total,
+                    view: true
+                },
+            ]
         }
     }
 }

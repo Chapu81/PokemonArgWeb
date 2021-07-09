@@ -14,8 +14,9 @@
     </template>
 
     <loader-c v-if="!loaded" />
+    <snackbar-c :text="text_snackbar" />
 
-    <v-snackbar
+    <!-- <v-snackbar
         v-model="snackbar"
         :timeout="2000"
     >
@@ -31,7 +32,8 @@
                 Cerrar
             </v-btn>
         </template>
-    </v-snackbar>
+    </v-snackbar> -->
+
 </div>
 </template>
 
