@@ -16,13 +16,15 @@
             </div>
             <template v-for="(card, key) in shopping_cart">
                 <div :key="key" class="data-card d-flex justify-space-between align-center my-4">
-                    <img :src="card.imgs[0]" :alt="card.name">
+                    <div class="img-container">
+                        <img :src="card.imgs[0]" :alt="card.name">
+                    </div>
                     <div>
                         <p>{{card.name}}</p>
                         <p>Cant: {{card.amount}}</p>
                         <p>{{card.language}}</p>
                     </div>
-                    <p>{{card.amount}} x ${{card.price | currency_format}}</p>
+                    <p class="text-right">{{card.amount}} x ${{card.price | currency_format}}</p>
                 </div>
             </template>
 
@@ -72,12 +74,21 @@ export default {
     data: () => ({
         loading_confirm: false,
         loading_reject: false,
+        snackbar_text: '',
     }),
 
     methods: {
         async confirm() {
             this.loading_confirm = true;
-            console.log('confirmar');
+            console.log(this.order.id);
+            let res = await this.$store.dispatch('delete', {
+                data_db: 'orders',
+                id: this.order.id
+            });
+
+            res 
+                ? this.update_orders('confirm')
+                : this.$emit('error_confirm', 'Ocurrió un error al confirmar la orden');
         },
 
         async reject() {
@@ -181,8 +192,17 @@ export default {
     margin-left: 10px;
 }
 
+.data-card .img-container {
+    width: 100px;
+    height: 75px;
+}
+
 .data-card img {
     max-width: 75px;
+}
+
+.data-card > p {
+    width: 100px;
 }
 
 .data-card p {

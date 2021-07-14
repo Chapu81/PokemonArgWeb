@@ -9,7 +9,7 @@
 
     <template v-for="order in orders">
         <div :key="order.id" class="mt-4" v-show="loaded">
-            <order-item :order="order" @update_orders="update_orders($event)"/>
+            <order-item :order="order" @update_orders="update_orders($event)" @error_confirm="state_snackbar($event)" />
         </div>
     </template>
 
