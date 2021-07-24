@@ -7,16 +7,51 @@
 			:src="`${route_img}/${i}.webp`"
 		></v-carousel-item>
 	</v-carousel>
+
+	<horizontal-c :products="cards_sale_pages" />
+
 </div>
 </template>
 
 <script>
+import Horizontal from '../components/Horizontal'
 export default {
 	name: 'Home',
+
+	components: {
+		'horizontal-c': Horizontal,
+	},
+	
+	data: () => ({
+		loaded: false,
+    }),
+
+	created() {
+		if(!this.cards_sale_pages.length) {
+			console.log('entre');
+			this.get_cards_sale();
+		}
+		
+    },
+
+    methods: {
+        async get_cards_sale() {
+			try {
+				await this.$store.dispatch('save_get_cards_sale');
+                this.loaded = true;
+			}catch (error) {
+				console.log(error);
+			}
+		},
+    },
 	
 	computed: {
 		mobile() {
             return this.$store.getters.mobile;
+        },
+
+		cards_sale_pages() {
+            return this.$store.getters.cards_sale_pages;
         },
 
 		route_img() {

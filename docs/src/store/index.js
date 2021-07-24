@@ -13,6 +13,7 @@ state: {
     count_shopping_cart: 0,
     color_app: "error",
 	cards_pages: [],
+	cards_sale_pages: [],
 	orders: [],
 	discounts: [],
 },
@@ -29,6 +30,10 @@ mutations: {
 		state.mobile = bool;
     },
     
+	set_cards_sale_pages(state, arr) {
+		state.cards_sale_pages = arr;
+    },
+	
 	set_cards_pages(state, arr) {
 		state.cards_pages.push(arr);
     },
@@ -77,6 +82,27 @@ mutations: {
 },
 
 actions: {
+	async save_get_cards_sale({ commit }) {
+		try {
+			const call_db = db.collection('cards').orderBy('date', 'desc').limit(6);
+			const snapshot = await call_db.get();
+			var cards = [];
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id,
+					...doc.data()
+				};
+				cards.push(data);
+			});
+			
+			commit('set_cards_sale_pages', cards);
+			return cards;
+
+		}catch (error) {
+			console.log(error);
+		}
+	},
+	
 	async save_get_cards({ commit }, last) {
 		try {
 			const call_db = db.collection('cards').orderBy('date', 'desc').limit(3);
@@ -295,6 +321,10 @@ getters: {
     
 	cards_pages: (state) => {
 		return state.cards_pages;
+    },
+	
+	cards_sale_pages: (state) => {
+		return state.cards_sale_pages;
     },
 	
 	orders: (state) => {
