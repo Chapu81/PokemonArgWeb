@@ -35,9 +35,14 @@
     </v-dialog>
 
 
-    <v-card-title class="pb-0">{{card.name}}</v-card-title>
+    <div class="d-flex justify-space-between align-center pt-4">
+        <v-card-title class="py-0">{{card.name}}</v-card-title>
+        <template v-if="logued">
+            <delete-item @delete_card="delete_card" />
+        </template>
+    </div>
 
-    <v-card-text class="pb-0">
+    <v-card-text class="pb-0 pt-1">
         <div class="subtitle-1 d-flex justify-space-between align-center">
             <span class="title">
                 $ {{card.price}}
@@ -99,15 +104,23 @@
                 />
             </span>
 
-            <template v-if="logued">
-                <delete-item @delete_card="delete_card" />
-            </template>
-            <span v-if="!logued && card.condition">
+            <span v-if="card.condition">
                 Estado: 
                 <span class="bolder">
                     {{ card.condition }}
                 </span>
             </span>
+
+            <!-- <template v-if="logued">
+                <delete-item @delete_card="delete_card" />
+            </template>
+
+            <span v-if="!logued && card.condition">
+                Estado: 
+                <span class="bolder">
+                    {{ card.condition }}
+                </span>
+            </span> -->
         </div>
     </v-card-text>
 
