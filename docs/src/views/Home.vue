@@ -8,7 +8,9 @@
 		></v-carousel-item>
 	</v-carousel>
 
-	<horizontal-c :products="cards_sale_pages" />
+	<horizontal-c title="Cartas" :products="cards_sale_pages" />
+	<horizontal-c title="Mazos" :products="cards_sale_pages" />
+	<horizontal-c title="Otros productos" :products="cards_sale_pages" />
 
 </div>
 </template>
@@ -28,7 +30,6 @@ export default {
 
 	created() {
 		if(!this.cards_sale_pages.length) {
-			console.log('entre');
 			this.get_cards_sale();
 		}
 		

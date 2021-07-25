@@ -1,6 +1,6 @@
 <template>
 <v-card
-    class="my-10 mx-3"
+    class="my-10 mx-3 card-container"
     max-width="350"
 >
     <v-dialog max-width="800">
@@ -275,6 +275,9 @@ import Delete_item from './Delete_item.vue'
 </script>
 
 <style scoped>
+.card-container {
+    cursor: default;
+}
 .push-btn {
     width: 100%;
     -webkit-transition: background-color .2s linear;
