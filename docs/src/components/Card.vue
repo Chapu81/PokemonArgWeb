@@ -282,6 +282,7 @@ import Delete_item from './Delete_item.vue'
 <style scoped>
 .card-container {
     cursor: default;
+    width: 100%;
 }
 .push-btn {
     width: 100%;

@@ -10,7 +10,6 @@
 
 	<horizontal-c title="Cartas" :products="cards_sale_pages" />
 	<horizontal-c title="Mazos" :products="cards_sale_pages" />
-	<horizontal-c title="Otros productos" :products="cards_sale_pages" />
 
 </div>
 </template>

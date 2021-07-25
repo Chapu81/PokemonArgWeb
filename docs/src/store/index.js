@@ -13,6 +13,7 @@ state: {
     count_shopping_cart: 0,
     color_app: "error",
 	cards_pages: [],
+	decks_pages: [],
 	cards_sale_pages: [],
 	orders: [],
 	discounts: [],
@@ -36,6 +37,10 @@ mutations: {
 	
 	set_cards_pages(state, arr) {
 		state.cards_pages.push(arr);
+    },
+	
+	set_decks_pages(state, arr) {
+		state.decks_pages.push(arr);
     },
 
     set_count_shopping_cart(state, { action, amount, card }) {
@@ -119,6 +124,29 @@ actions: {
 			});
 			
 			commit('set_cards_pages', cards);
+			return cards;
+
+		}catch (error) {
+			console.log(error);
+		}
+	},
+	
+	async save_get_decks({ commit }, last) {
+		try {
+			const call_db = db.collection('decks').orderBy('date', 'desc').limit(3);
+			const snapshot = !last 
+							? await call_db.get() 
+							: await call_db.startAfter(last).get();
+			var cards = [];
+			snapshot.forEach(doc => {
+				let data = {
+					id: doc.id,
+					...doc.data()
+				};
+				cards.push(data);
+			});
+			
+			commit('set_decks_pages', cards);
 			return cards;
 
 		}catch (error) {
@@ -321,6 +349,10 @@ getters: {
     
 	cards_pages: (state) => {
 		return state.cards_pages;
+    },
+	
+	decks_pages: (state) => {
+		return state.decks_pages;
     },
 	
 	cards_sale_pages: (state) => {

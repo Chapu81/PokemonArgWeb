@@ -173,12 +173,6 @@ import Snackbar from '../../components/Snackbar.vue'
                         this.loading = false;
                         return false;
                     }
-                }else {
-                    if(this.data_product.description === '' ) {
-                        this.snackbar_text = 'Complete todos los campos';
-                        this.loading = false;
-                        return false;
-                    }
                 }
 
                 if(parseInt(stock) < 1 || parseFloat(price) < 1) {

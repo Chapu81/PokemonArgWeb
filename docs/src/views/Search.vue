@@ -1,15 +1,11 @@
 <template>
-    <cards-view />
+    <products-view />
 </template>
 
 <script>
-import Cards from './Cards.vue'
-    export default {
-        name: 'Search',
-        components: {
-            'cards-view': Cards,
-        },
-    }
+export default {
+    name: 'Search',
+}
 </script>
 
 <style scoped>

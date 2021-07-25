@@ -21,6 +21,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "cards" */ '../views/Cards.vue')
   },
   {
+    path: '/mazos',
+    name: 'Decks',
+    component: () => import(/* webpackChunkName: "cards" */ '../views/Decks.vue')
+  },
+  {
     path: '/busqueda/:card',
     name: 'Search',
     component: () => import(/* webpackChunkName: "cardssearch" */ '../views/Cards.vue')

@@ -1,10 +1,10 @@
 <template>
-    <products-view />
+    <products-view page="decks" />
 </template>
 
 <script>
 export default {
-    name: 'Cards',
+    name: 'Decks',
 }
 </script>
 
