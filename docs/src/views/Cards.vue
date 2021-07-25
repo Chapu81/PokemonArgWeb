@@ -123,6 +123,8 @@ export default {
 				this.card_page <= this.cards_save.length 
 						? this.set_cards(this.card_page - 1)
 						: this.get_cards();
+
+				this.scroll_top();
 			}
 		},
 
@@ -130,7 +132,13 @@ export default {
 			if(this.card_page > 1) {
 				this.card_page--;
 				this.set_cards(this.card_page - 1);
+
+				this.scroll_top();
 			}
+		},
+
+		scroll_top() {
+			window.scrollTo(0, 0);
 		},
 
 		set_cards(id) {
