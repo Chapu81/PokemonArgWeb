@@ -102,6 +102,12 @@
             <template v-if="logued">
                 <delete-item @delete_card="delete_card" />
             </template>
+            <span v-if="!logued && card.condition">
+                Estado: 
+                <span class="bolder">
+                    {{ card.condition }}
+                </span>
+            </span>
         </div>
     </v-card-text>
 
@@ -131,7 +137,6 @@
 </template>
 
 <script>
-import db from '../main'
 import Delete_item from './Delete_item.vue'
     export default {
         name: 'Card',

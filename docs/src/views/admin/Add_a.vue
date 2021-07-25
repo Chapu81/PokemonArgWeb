@@ -42,6 +42,15 @@
         
         <v-select
             v-if="is_cards"
+            :items="condition_select"
+            v-model="data_product.condition"
+            label="Estado"
+            dense
+            outlined
+        ></v-select>
+        
+        <v-select
+            v-if="is_cards"
             :items="type_select"
             v-model="data_product.type"
             label="Tipo"
@@ -140,6 +149,7 @@ import Snackbar from '../../components/Snackbar.vue'
         created() {
             if(this.is_cards) {
                 this.data_product.type = '';
+                this.data_product.condition = 'Light Played';
             }else {
                 this.data_product.description = '';
             }
@@ -258,6 +268,17 @@ import Snackbar from '../../components/Snackbar.vue'
                     'Francés',
                     'Holandés',
                     'Italiano',
+                ];
+            },
+            
+            condition_select() {
+                return [
+                    'Mint',
+                    'Near mint',
+                    'Light Played',
+                    'Played',
+                    'Heavy Played',
+                    'Damaged',
                 ];
             },
             
