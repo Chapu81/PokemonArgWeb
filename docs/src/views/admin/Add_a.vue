@@ -8,6 +8,7 @@
         <h2>Agregar {{database === 'cards' ? 'cartas' : 'mazos'}}</h2>
 
 		<v-text-field
+            id="input-name"
             label="Nombre"
             dense
             outlined
@@ -81,6 +82,14 @@
             </template>
         </v-select>
 
+        <v-text-field
+            v-if="is_cards"
+            label="Código"
+            dense
+            outlined
+			v-model="data_product.code"
+        ></v-text-field>
+
         <v-textarea
             outlined
             dense
@@ -133,9 +142,10 @@ import Snackbar from '../../components/Snackbar.vue'
             data_product: {
                 imgs: [],
                 name: '',
-                price: '',
+                price: '50',
                 stock: 1,
-                language: '',
+                language: 'Inglés',
+                code: '',
                 date: null,
             }
         }),
@@ -155,7 +165,16 @@ import Snackbar from '../../components/Snackbar.vue'
             }
         },
 
+        mounted() {
+            this.focus_input();
+        },
+
         methods: {
+            focus_input() {
+                let input = document.getElementById('input-name');
+                input.focus();
+            },
+
             validate() {
                 this.loading = true;
 
@@ -168,7 +187,7 @@ import Snackbar from '../../components/Snackbar.vue'
                 }
 
                 if(this.is_cards) {
-                    if(this.data_product.type === '' ) {
+                    if(this.data_product.type === '' || this.data_product.code === '') {
                         this.snackbar_text = 'Complete todos los campos';
                         this.loading = false;
                         return false;
@@ -194,6 +213,7 @@ import Snackbar from '../../components/Snackbar.vue'
                     data.filters.push(data.language.toLowerCase());
                     if(data.type) {
                         data.filters.push(data.type.toLowerCase());
+                        data.filters.push(data.code);
                     }
 
                     await db.collection(this.database).add(data);
@@ -211,14 +231,16 @@ import Snackbar from '../../components/Snackbar.vue'
                 this.data_product = {
                     name: '',
                     imgs: [],
-                    price: '',
+                    price: '50',
                     stock: 1,
-                    language: '',
+                    language: 'Inglés',
+                    code: '',
                     date: null,
                 }
 
                 if(this.is_cards) {
                     this.data_product.type = '';
+                    this.data_product.condition = 'Light Played';
                 }else {
                     this.data_product.description = '';
                 }
@@ -254,9 +276,9 @@ import Snackbar from '../../components/Snackbar.vue'
             language_select() {
                 return [
                     'Inglés',
-                    'Español',
-                    'Coreano',
                     'Japonés',
+                    'Coreano',
+                    'Español',
                     'Portugués',
                     'Alemán',
                     'Francés',

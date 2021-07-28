@@ -40,6 +40,14 @@
         <template v-if="logued">
             <delete-item @delete_card="delete_card" />
         </template>
+        <template v-else>
+            <span v-if="card.code" class="code">
+                Código: 
+                <span class="bolder">
+                    {{ card.code }}
+                </span>
+            </span>
+        </template>
     </div>
 
     <v-card-text class="pb-0 pt-1">
@@ -337,5 +345,11 @@ import Delete_item from './Delete_item.vue'
 
 .tipo {
     height: 36px;
+}
+
+.code {
+    font-size: 14px;
+    color: rgba(0, 0, 0, .6);
+    margin-right: 16px;
 }
 </style>
