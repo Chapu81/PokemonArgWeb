@@ -21,6 +21,7 @@
 			<v-card>
 				<div class="pa-5 pb-0">
 					<v-text-field
+						id="input-user"
 						v-model="new_user"
 						label="Usuario (sin arroba @)"
 						dense
@@ -45,6 +46,18 @@
 		</v-dialog>
 	</div>
 
+	<div class="d-flex justify-space-between align-center contain-totals">
+		<p>Total usuarios: {{ discounts.length }}</p>
+		<v-text-field
+			v-model="search_user"
+			class="filter-user"
+			label="Buscar usuario"
+			clearable
+			dense
+			outlined
+		></v-text-field>
+	</div>
+
 	<div class="table-container">
 		<v-simple-table fixed-header>
 			<template v-slot:default>
@@ -60,13 +73,12 @@
 				</thead>
 				<tbody>
 					<tr
-						v-for="(item, key) in discounts"
+						v-for="(item, key) in filter_discounts"
 						:key="`${item.id}-${key}`"
 					>
 						<td>{{ item.user }}</td>
 						<td class="delete text-right">
 							<span>
-								<!-- <v-icon @click="delete_discounts(item.id)">mdi-delete</v-icon> -->
 								<v-btn
 									icon
 									plain
@@ -100,7 +112,16 @@ export default {
 		loaded: false,
 		btn_loading: null,
 		loading_modal: false,
+		search_user: '',
 	}),
+
+	watch: {
+		dialog() {
+			this.dialog 
+				? setTimeout(this.focus_input, 1)
+				: this.new_user = '';
+		}
+	},
 
 	created() {
 		this.get_discounts();
@@ -165,13 +186,30 @@ export default {
 		set_snackbar(text) {
 			this.text_snackbar = text;
 			setTimeout(() => this.text_snackbar = '', 2100);
-		}
+		},
+
+		focus_input() {
+			let input = document.getElementById('input-user');
+			input.focus();
+		},
 	},
 
 	computed: {
 		discounts() {
-            return this.$store.getters.discounts;
+            return this.$store.getters.discounts.sort(function (a, b) {
+				if (a.user > b.user) {
+					return 1;
+				}
+				if (a.user < b.user) {
+					return -1;
+				}
+				return 0;
+			});
         },
+
+		filter_discounts() {
+			return this.discounts.filter(data => data.user.includes(this.search_user));
+		}
 	}
 }
 </script>
@@ -188,5 +226,24 @@ th.delete span {
 
 td.delete span{
 	cursor: pointer;
+}
+
+.contain-totals {
+	margin-bottom: -20px;
+}
+
+.contain-totals p {
+	margin-bottom: 20px;
+}
+
+.filter-user {
+	width: 50%;
+	max-width: 150px;
+}
+
+@media screen and (min-width: 768px){
+	.filter-user {
+		max-width: 250px;
+	}
 }
 </style>
